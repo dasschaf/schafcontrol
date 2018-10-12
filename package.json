@@ -1,0 +1,26 @@
+{
+  "name": "schafcontrol",
+  "version": "0.0.0",
+  "description": "TrackMania Forever server controller in Node.JS style",
+  "main": "./core/app.js",
+  "dependencies": {
+    "gbxremote": "^0.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/dassschaf/schafcontrol.git"
+  },
+  "keywords": [
+    "TrackMania"
+  ],
+  "author": "dassschaf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/dassschaf/schafcontrol/issues"
+  },
+  "homepage": "https://gitlab.com/dassschaf/schafcontrol#README"
+}
