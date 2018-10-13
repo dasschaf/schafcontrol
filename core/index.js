@@ -10,11 +10,7 @@ let gbxremote = require('gbxremote');
 
 //-- require: other files --//
 let settings = require('./include/settings.js');
-<<<<<<< HEAD
-//let database = require('./include/mongodb.js');
-=======
 let database = require('./include/mongodb.js');
->>>>>>> master
 
 
 //-- set up connection variables --//
