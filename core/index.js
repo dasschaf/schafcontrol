@@ -45,7 +45,6 @@ server.on('error', (error) =>
 server.on('TrackMania.PlayerChat', params =>
 {
 
-    server.query('ChatSendServerMessage', ["faggot!"]);
 
 });
 
