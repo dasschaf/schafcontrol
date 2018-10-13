@@ -18,7 +18,7 @@ let database = require('./include/mongodb.js');
 
 
 //-- set up connection variables --//
-let server = gbxremote.createClient(settings.server.host, settings.server.port);
+let server = gbxremote.createClient(settings.server.port, settings.server.host);
 
 
 //-- set up connection to TMF server --//
