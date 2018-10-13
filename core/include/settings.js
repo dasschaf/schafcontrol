@@ -19,7 +19,11 @@ exports.server =
         //
         // host:
         // The machine your TM server runs on. This is classically localhost.
+<<<<<<< HEAD
         host: '127.0.0.1',
+=======
+        host: 'localhost',
+>>>>>>> master
 
         // port:
         // The port your TrackMania server listens at. Usually this is 5001, but varies if you have multiple servers.

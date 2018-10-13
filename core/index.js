@@ -10,7 +10,11 @@ let gbxremote = require('gbxremote');
 
 //-- require: other files --//
 let settings = require('./include/settings.js');
+<<<<<<< HEAD
 //let database = require('./include/mongodb.js');
+=======
+let database = require('./include/mongodb.js');
+>>>>>>> master
 
 
 //-- set up connection variables --//
@@ -21,6 +25,7 @@ let server = gbxremote.createClient(settings.server.host, settings.server.port);
 server.on('connect', () =>
 {
     server.query('Authenticate', [settings.server.login, settings.server.password]).then(result =>
+<<<<<<< HEAD
     {
 
     }).catch(error =>
@@ -57,4 +62,25 @@ function r (object)
 {
     console.log(JSON.stringify(object));
 }
+=======
+        {
+
+        },
+        reject =>
+        {
+
+        });
+
+    server.query('EnableCallbacks', [true]).then(result =>
+        {
+
+        },
+        reject =>
+        {
+
+        });
+});
+
+//-- 
+>>>>>>> master
 
