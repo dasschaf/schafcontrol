@@ -10,12 +10,7 @@
 let mc = require('mongodb').MongoClient;
 
 //-- require: other files --//
-<<<<<<< HEAD
 let settings = require('./settings.js');
-=======
-let settings = require('settings.js');
->>>>>>> master
-
 
 //-- make the database object --//
 mc.connect(settings.mongodb.url, {poolSize: 25}, (err, db) =>

@@ -25,7 +25,6 @@ let server = gbxremote.createClient(settings.server.host, settings.server.port);
 server.on('connect', () =>
 {
     server.query('Authenticate', [settings.server.login, settings.server.password]).then(result =>
-<<<<<<< HEAD
     {
 
     }).catch(error =>
@@ -62,25 +61,3 @@ function r (object)
 {
     console.log(JSON.stringify(object));
 }
-=======
-        {
-
-        },
-        reject =>
-        {
-
-        });
-
-    server.query('EnableCallbacks', [true]).then(result =>
-        {
-
-        },
-        reject =>
-        {
-
-        });
-});
-
-//-- 
->>>>>>> master
-
