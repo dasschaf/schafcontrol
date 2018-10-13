@@ -1,4 +1,2 @@
-/node_modules/**
-/.vs/**
-/core/bin/**
-/core/obj/**
+/**/node_modules/**
+/**/.idea/**
