@@ -14,29 +14,21 @@ let gbxremote = require('gbxremote');
 let settings = require('./settings.js');
 
 
-//-- set up connection variables --//
-let server;
+let server = gbxremote.createClient(settings.server.port, settings.server.host);
 
-//-- set up connection to TMF server --//
-module.exports.connect = () =>
+server.on('connect', () =>
 {
-    server = gbxremote.createClient(settings.server.port, settings.server.host);
-
-	server.on('connect', () =>
+	server.query('Authenticate', [settings.server.login, settings.server.password]).then(result =>
 	{
-		server.query('Authenticate', [settings.server.login, settings.server.password]).then(result =>
-        {
-            server.query('EnableCallbacks', [true]);
-
-		}).catch(error =>
+		server.query('EnableCallbacks', [true]).then(result =>
 		{
-			throw error;
+			module.exports.server = server;
 		});
 
-	});
-};
 
-module.exports.get = () =>
-{
-	return server;
-};
+	}).catch(error =>
+	{
+		throw error;
+	});
+
+});

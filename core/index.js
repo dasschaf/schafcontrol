@@ -15,8 +15,9 @@ let settings = require('./include/settings');
 //-- set up connections variables --//
 //
 // 1: server
-let server = require('./include/c.server');
-//server.connect();
+let server = require('./include/c.server').server;
+server.query('ChatSendServerMessage', ["SchafControl is starting ..."]);
+console.log('- Startup -: Successfully established a connection to the TrackMania Server! (' + process.uptime() + ')');
 
 // 2: database
 let db = require('./include/c.mongodb');
