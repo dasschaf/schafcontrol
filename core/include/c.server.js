@@ -15,41 +15,28 @@ let settings = require('./settings.js');
 
 
 //-- set up connection variables --//
-let server = gbxremote.createClient(settings.server.port, settings.server.host);
-let connected = false;
+let server;
 
 //-- set up connection to TMF server --//
 module.exports.connect = () =>
 {
+    server = gbxremote.createClient(settings.server.port, settings.server.host);
+
 	server.on('connect', () =>
 	{
 		server.query('Authenticate', [settings.server.login, settings.server.password]).then(result =>
-		{
-
-
-		}).catch(error =>
-		{
-			throw error;
-		});
-
-		server.query('EnableCallbacks', [true]).then(result =>
-		{
-			console.log('- Startup -: Successfully authenticated and Callbacks enabled! (' + process.uptime() + ')');
-			connected = true;
+        {
+            server.query('EnableCallbacks', [true]);
 
 		}).catch(error =>
 		{
 			throw error;
 		});
+
 	});
 };
 
 module.exports.get = () =>
 {
-	if (!connected)
-	{
-		throw new Error('Call .connect(); first -- connection not created yet.');
-	}
-
 	return server;
 };
