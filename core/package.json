@@ -4,6 +4,7 @@
   "description": "SchafControl core scripts",
   "main": "index.js",
   "dependencies": {
+    "express": "^4.16.4",
     "gbxremote": "^0.2.1",
     "mongodb": "^3.1.8",
     "mysql": "^2.16.0"

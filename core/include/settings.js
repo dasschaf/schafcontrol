@@ -10,7 +10,14 @@ exports.mongodb =
         //
         // url:
         // MongoDB connection URI, refer to https://docs.mongodb.com/manual/reference/connection-string/
-        url: 'mongodb://localhost:27017/schafcontrol'
+        url: 'mongodb://localhost:27017/schafcontrol',
+
+        // options:
+        // MongoDB options object
+        options:
+            {
+                poolSize: 10
+            }
     };
 
 exports.server =

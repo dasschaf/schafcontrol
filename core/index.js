@@ -9,50 +9,23 @@ let gbxremote = require('gbxremote');
 
 
 //-- require: other files --//
-let settings = require('./include/settings.js');
-let database = require('./include/mongodb.js');
+let settings = require('./include/settings');
 
 
-//-- set up connection variables --//
-let server = gbxremote.createClient(settings.server.port, settings.server.host);
+//-- set up connections variables --//
+//
+// 1: server
+let server = require('./include/c.server');
+server.connect();
 
-
-//-- set up connection to TMF server --//
-server.on('connect', () =>
-{
-    server.query('Authenticate', [settings.server.login, settings.server.password]).then(result =>
-    {
-
-    }).catch(error =>
-    {
-        throw error;
-    });
-    server.query('EnableCallbacks', [true]).then(result =>
-    {
-
-    }).catch(error =>
-    {
-        throw error;
-    });
-});
-
-server.on('error', (error) =>
-{
-    console.log(error);
-});
-
-//-- wait for the callbacks --//
-server.on('TrackMania.PlayerChat', params =>
-{
-
-
-});
+// 2: database
+let db = require('./include/c.mongodb');
+db.connect();
 
 
 
-//-- reject utility --//
-
-function r (object)
-{
-    console.log(JSON.stringify(object));
-}
+//--
+//
+// TrackMania Server Callback handling
+//
+//
