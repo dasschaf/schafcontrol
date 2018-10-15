@@ -20,9 +20,15 @@ server.on('connect', () =>
 {
 	server.query('Authenticate', [settings.server.login, settings.server.password]).then(result =>
 	{
+
+		if (!result)
+			process.exit(666);
+
 		server.query('EnableCallbacks', [true]).then(result =>
 		{
-			module.exports.server = server;
+			if
+
+
 		});
 
 

@@ -16,6 +16,7 @@ let settings = require('./include/settings');
 //
 // 1: server
 let server = require('./include/c.server').server;
+
 server.query('ChatSendServerMessage', ["SchafControl is starting ..."]);
 console.log('- Startup -: Successfully established a connection to the TrackMania Server! (' + process.uptime() + ')');
 
