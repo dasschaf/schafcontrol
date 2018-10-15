@@ -28,8 +28,7 @@ module.exports.connect = () => new Promise((resolve, reject) =>
 			resolve(db);
 
 			connection = db;
-
-			console.log('- Startup -: Successfully established a connection pool to the MongoDB database! (' + process.uptime() + ')');
+			
 		});
 	});
 
@@ -41,4 +40,4 @@ module.exports.get = () =>
 	}
 
 	return connection;
-}
+};

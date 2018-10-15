@@ -16,7 +16,8 @@ exports.mongodb =
         // MongoDB options object
         options:
             {
-                poolSize: 10
+                poolSize: 10,
+                useNewUrlParser: true
             }
 
     };

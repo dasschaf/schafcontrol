@@ -14,27 +14,36 @@ let gbxremote = require('gbxremote');
 let settings = require('./settings.js');
 
 
-let server = gbxremote.createClient(settings.server.port, settings.server.host);
+let server;
+let c = false;
 
-server.on('connect', () =>
+module.exports.connect = async () => {
+
+    server = gbxremote.createClient(settings.server.port, settings.server.host);
+
+    server.on('connect', () => {
+        server.query('Authenticate', [settings.server.login, settings.server.password]).then(result => {
+
+            if (!result)
+                process.exit(666);
+
+            server.query('EnableCallbacks', [true]).then(result => {
+                if (!result)
+                    process.exit(667);
+
+                c = true;
+            });
+
+
+        }).catch(error => {
+            throw error;
+        });
+
+    });
+
+};
+
+module.exports.get = () =>
 {
-	server.query('Authenticate', [settings.server.login, settings.server.password]).then(result =>
-	{
-
-		if (!result)
-			process.exit(666);
-
-		server.query('EnableCallbacks', [true]).then(result =>
-		{
-			if
-
-
-		});
-
-
-	}).catch(error =>
-	{
-		throw error;
-	});
-
-});
+    return server;
+};
