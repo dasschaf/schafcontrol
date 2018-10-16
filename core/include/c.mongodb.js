@@ -17,13 +17,15 @@ let connection = null;
 
 module.exports.connect = () => new Promise((resolve, reject) =>
 	{
-		mc.connect(settings.mongodb.url, settings.mongodb.options, (err, db) =>
+		mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		{
 			if(err)
 			{
 				reject(err);
 				return;
 			}
+
+			let db = client.db(settings.mongodb.db);
 
 			resolve(db);
 
