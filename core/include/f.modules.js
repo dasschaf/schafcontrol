@@ -13,19 +13,30 @@ let settings = require('./settings');
 module.exports.make = (db, server) =>
 	{
 
-		const path = '../plugins/';
+		const path = __dirname + '/..\\plugins\\';
 
 		let files = fs.readdirSync(path);
-
+		
 		let rawlist = [];
-
+		
+		console.log('\n- Startup -: Loading Plugins: ('  + process.uptime() + ')\n');
+		
 		files.forEach(file =>
 		{
-			rawlist.push(path + file);
+			if(file.endsWith('.js'))
+				rawlist.push(path + file);
+			
+			else
+				console.log('- WARNING -: Invalid plugin file in ./plugins/: ' + file + ' (' + process.uptime() + ')');
 		});
 
-		return rawlist.map(cv =>
+		let list = rawlist.map(cv =>
 		{
-			return require(cv)(db, server);
+			let pg = require(cv)(db, server);
+			
+			console.log('- Startup -: PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
+			
 		});
+		
+		console.log('\n- Startup -: Plugins loaded! ('  + process.uptime() + ')');
 	};

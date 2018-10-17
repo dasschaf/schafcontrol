@@ -30,8 +30,7 @@ module.exports.connect = async () => {
             server.query('EnableCallbacks', [true]).then(result => {
                 if (!result)
                     process.exit(667);
-
-                c = true;
+                
             });
 
 

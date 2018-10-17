@@ -33,10 +33,25 @@ db.connect()
 		console.log('- Startup -: Successfully established a connection to the MongoDB server! (' + process.uptime() + ')');
 
 		/*
-		 *	Make modules list:
+		 *	Make plugin list:
 		 */
 
-		let modules = modules.make(db, server);
+		let plugins = modules.make(db, server);
+		console.log('- Startup -: Plugin list successfully built! ' + process.uptime() + ')');
+		
+		/*
+		 * TrackMania Server Callback Handling:
+		 * (per plugin)
+		 */
+		
+		server.on('TrackMania.PlayerConnect', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onConnect === 'function')
+					plugin.onConnect(params);
+			});
+		})
 
 	});
 
