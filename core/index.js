@@ -9,7 +9,7 @@
 
 //-- require: other files --//
 let settings = require('./include/settings');
-
+let modules = require('./include/f.modules');
 
 //-- set up connections variables --//
 //
@@ -33,48 +33,10 @@ db.connect()
 		console.log('- Startup -: Successfully established a connection to the MongoDB server! (' + process.uptime() + ')');
 
 		/*
-		 *
+		 *	Make modules list:
 		 */
 
-		server.on('TrackMania.PlayerConnect', params =>
-		{
-			let login = params[0];
+		let modules = modules.make(db, server);
 
-			server.query('GetPlayerInfo', [login, 1]).then(result =>
-			{
-				db.get().collection('players').findOne({login: login}, (error, player) =>
-				{
-					if (error)
-						throw error;
-
-					if (player)
-					{
-						// player exists:
-
-						db.get().collection('players').updateOne({login: login}, {$set: {joins: player.joins + 1}}, {upsert: true}, (error, result) =>
-						{
-							if (error)
-								throw error;
-
-						});
-
-						server.query('ChatSendServerMessage', ['... player $f00' + result.NickName + '$z$s$fff has joined the server for the $f00' + (player.joins + 1) + '. $fff time!']);
-					}
-
-					else
-					{
-						// player doesn't exist:
-						db.get().collection('players').insertOne({login: login, nickname: result.NickName, joins: 1}, (error, result) =>
-						{
-							if (error)
-								throw error;
-
-						});
-
-						server.query('ChatSendServerMessage', ['... player $f00' + result.NickName + '$z$s$fff has joined the server for the $f00' + 1 + '. $fff time!']);
-					}
-				});
-			})
-		});
 	});
 
