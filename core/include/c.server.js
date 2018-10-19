@@ -15,7 +15,7 @@ let settings = require('./settings.js');
 
 
 let server;
-let c = false;
+module.exports.c = false;
 
 module.exports.connect = async () => {
 
@@ -30,7 +30,8 @@ module.exports.connect = async () => {
             server.query('EnableCallbacks', [true]).then(result => {
                 if (!result)
                     process.exit(667);
-                
+	
+	            module.exports.c = true;
             });
 
 

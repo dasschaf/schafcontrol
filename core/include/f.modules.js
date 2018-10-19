@@ -36,7 +36,10 @@ module.exports.make = (db, server) =>
 			
 			console.log('- Startup -: PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
 			
+			return pg;
 		});
 		
 		console.log('\n- Startup -: Plugins loaded! ('  + process.uptime() + ')');
+		
+		return list;
 	};

@@ -37,12 +37,20 @@ db.connect()
 		 */
 
 		let plugins = modules.make(db, server);
-		console.log('- Startup -: Plugin list successfully built! ' + process.uptime() + ')');
+		
+		console.log('- Startup -: Plugin list successfully built! (' + process.uptime() + ')\n\n- Running -: Listenning now to Callbacks and events. ('+ process.uptime() +')');
 		
 		/*
 		 * TrackMania Server Callback Handling:
 		 * (per plugin)
 		 */
+		
+		// logging purposes:
+		/*
+		server.on('callback', (method, params) =>
+		{
+			console.log('- Running -: Callback type \'' + method + '\' triggered. (' + process.uptime() + ')');
+		});*/
 		
 		server.on('TrackMania.PlayerConnect', params =>
 		{
@@ -51,7 +59,33 @@ db.connect()
 				if (typeof plugin.onConnect === 'function')
 					plugin.onConnect(params);
 			});
-		})
-
+		});
+		
+		server.on('TrackMania.PlayerDisconnect', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onDisconnect === 'function')
+					plugin.onDisconnect(params);
+			});
+		});
+		
+		server.on('TrackMania.PlayerChat', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onChat === 'function')
+					plugin.onChat(params);
+			});
+		});
+		
+		server.on('TrackMania.PlayerFinish', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onFinish === 'function')
+					plugin.onFinish(params);
+			});
+		});
 	});
 
