@@ -41,28 +41,33 @@ class plugin
 				{
 					let nickname = info.NickName;
 					
-					let player = db.get().collection('players').findOneAndUpdate(
-																{login: login},
-																{
-																	$inc: {joins: +1},
-																	$set: {nickname: nickname}
-																},
-																{
-																	upsert: true,
-																	returnNewDocument:true
-																}
-																);
-					
-					let joins = player.joins;
-					
-					let message = this.utilities.fill(this.dictionary.joinmessage,
+					db.get().collection('players').findOneAndUpdate(
+						{login: login},
 						{
-							title: title,
-							player: nickname,
-							nr: joins
-						});
+							$inc: {joins: +1},
+							$set: {nickname: nickname}
+						},
+						{
+							upsert: true,
+							returnOriginal:false
+						}
+						)
+						.then (document =>
+						{
+							let player = document.value;
+							
+							let message = this.utilities.fill(this.dictionary.joinmessage,
+								{
+									title: title,
+									player: nickname,
+									nr: player.joins
+								});
+							
+							server.query('ChatSendServerMessage', [message]);
+						})
 					
-					server.query('ChatSendServerMessage', [message]);
+					
+					
 				});
 		}
 		
