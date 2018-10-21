@@ -46,6 +46,16 @@ class plugin
 		// [2] int    : Time/Score
 	}
 	
+	onCheckpoint (params)
+	{
+		// params:
+		// [0] int    : Player UId
+		// [1] string : Player login
+		// [2] int    : time/score
+		// [3] int    : Current Lap
+		// [4] int    : Checkpoint Number
+	}
+	
 	onChallengeEnd (params)
 	{
 		// params:
@@ -76,6 +86,19 @@ class plugin
 		// none.
 	}
 	
+	onRaceBegin (params)
+	{
+		// params:
+		// [1] struct : ChallengeInfo (SChallengeInfo)
+	}
+	
+	onRaceEnd (params)
+	{
+		// params:
+		// [0] struct : Player Rankings (SPlayerRankings[])
+		// [1] struct : Challenge Info (SChallengeInfo)
+	}
+	
 	onStatusChange (params)
 	{
 		// params:
@@ -83,15 +106,66 @@ class plugin
 		// [1] string : Status Name
 	}
 	
-	onCheckpoint (params)
+	onBillUpdate (params)
+	{
+		// params:
+		// [0] int    : Bill ID
+		// [1] int    : State
+		// [2] string : State Name
+		// [3] int    : Transaction ID
+	}
+	
+	onPlayerInfoChange (params)
+	{
+		// params:
+		// [0] struct : Player Info
+	}
+	
+	onVoteUpdate (params)
+	{
+		// params:
+		// [0] string : State Name
+		// [1] string : Login
+		// [2] string : Command Name
+		// [3] string : Command param
+	}
+	
+	onFlowControlTransition (params)
+	{
+		// params:
+		// [0] string : Transition
+	}
+	
+	onChallengeListModified (params)
+	{
+		// params:
+		// [0] int    : Current Challenge Index
+		// [1] int    : Next Challenge Index
+		// [2] int    : Is List Modified?
+	}
+	
+	onTunnelDataRecieve (params)
 	{
 		// params:
 		// [0] int    : Player UId
-		// [1] string : Player login
-		// [2] int    : time/score
-		// [3] int    : Current Lap
-		// [4] int    : Checkpoint Number
+		// [1] string : Player Login
+		// [2] string : base64 encoded data
 	}
+	
+	onPlayerIncoherence (params)
+	{
+		// params:
+		// [0] int    : Player UId
+		// [1] string : Player Login
+	}
+	
+	onPlayerManialinkAnswer (params) {
+		// params:
+		// [0] int    : Player UId
+		// [1] string : Player Login
+		// [2] int    : Answer
+	}
+	
 }
 
 module.exports = (db, server) =>

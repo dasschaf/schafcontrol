@@ -18,6 +18,7 @@ let gbxremote = require('./include/c.server');
 let server;
 
 //-- connect --//
+// 1: server
 gbxremote.connect();
 server = gbxremote.get();
 
@@ -30,6 +31,7 @@ let db = require('./include/c.mongodb');
 db.connect()
 	.then(() =>
 	{
+		//-- log! --/
 		console.log('- Startup -: Successfully established a connection to the MongoDB server! (' + process.uptime() + ')');
 
 		/*
@@ -87,5 +89,150 @@ db.connect()
 					plugin.onFinish(params);
 			});
 		});
+		
+		server.on('TrackMania.PlayerCheckpoint', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onCheckpoint === 'function')
+					plugin.onCheckpoint(params);
+			});
+		});
+		
+		server.on('TrackMania.BeginRace', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onRaceBegin === 'function')
+					plugin.onRaceBegin(params);
+			});
+		});
+		
+		server.on('TrackMania.EndRace', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onRaceEnd === 'function')
+					plugin.onRaceEnd(params);
+			});
+		});
+		
+		server.on('TrackMania.BeginChallenge', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onChallengeBegin === 'function')
+					plugin.onChallengeBegin(params);
+			});
+		});
+		
+		server.on('TrackMania.EndChallenge', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onChallengeEnd === 'function')
+					plugin.onChallengeEnd(params);
+			});
+		});
+		
+		server.on('TrackMania.BeginRound', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onRoundBegin === 'function')
+					plugin.onRoundBegin(params);
+			});
+		});
+		
+		server.on('TrackMania.EndRound', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onRoundEnd === 'function')
+					plugin.onRoundEnd(params);
+			});
+		});
+		
+		server.on('TrackMania.StatusChanged', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onStatusChange === 'function')
+					plugin.onStatusChange(params);
+			});
+		});
+		
+		server.on('TrackMania.PlayerIncoherence', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onPlayerIncoherence === 'function')
+					plugin.onPlayerIncoherence(params);
+			});
+		});
+		
+		server.on('TrackMania.BillUpdated', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onBillUpdate === 'function')
+					plugin.onBillUpdate(params);
+			});
+		});
+		
+		server.on('TrackMania.TunnelDataRecieved', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onTunnelDataRecieve === 'function')
+					plugin.onTunnelDataRecieve(params);
+			});
+		});
+		
+		server.on('TrackMania.ChallengeListModified', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onChallengeListModified === 'function')
+					plugin.onChallengeListModified(params);
+			});
+		});
+		
+		server.on('TrackMania.PlayerInfoChanged', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onPlayerInfoChange === 'function')
+					plugin.onPlayerInfoChange(params);
+			});
+		});
+		
+		server.on('TrackMania.ManualFlowControlTransition', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onFlowControlTransition === 'function')
+					plugin.onFlowControlTransition(params);
+			});
+		});
+		
+		server.on('TrackMania.VoteUpdated', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onVoteUpdate === 'function')
+					plugin.onVoteUpdate(params);
+			});
+		});
+		
+		server.on('TrackMania.ManialinkPageAnswer', params =>
+		{
+			plugins.forEach(plugin =>
+			{
+				if (typeof plugin.onPlayerManialinkAnswer === 'function')
+					plugin.onPlayerManialinkAnswer(params);
+			});
+		});
+		
 	});
 

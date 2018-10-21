@@ -49,3 +49,10 @@ exports.server =
         // The login of your server, which it is registered to at the Master server of TMF.
         masterserver_login: 'ichfahreauto'
     };
+
+exports.masteradmin =
+    {
+        login: 'papa_tojo',
+        
+        title: '$o$60Fr$82Ce$A49s$B56i$D73d$F90e$F90n$CA0t $6D0f$3E0o$0F0x'
+    };
