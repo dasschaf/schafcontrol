@@ -12,8 +12,8 @@ class plugin
 		this.db = db;
 		this.server = server;
 		
-		this.name = 'Sample Plugin';
-		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
+		this.name = 'WinnerCount';
+		this.desc = 'Provides stats for count of wins';
 		
 		this.dictionary = require('../include/dictionary');
 		this.utilities = require('../include/f.utilities');
@@ -29,6 +29,12 @@ class plugin
 			
 			db = this.db,
 			server = this.server;
+		
+		if (ranking.length < 2 || ranking[0].BestTime === '-1')
+		{
+			server.query('ChatSendServerMessage', [this.dictionary.nowinner]);
+			return;
+		}
 		
 		let winner = ranking[0];
 		
