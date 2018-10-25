@@ -1,8 +1,8 @@
 
 //
-// SchafControl sample plugin
+// SchafControl localRecords plugin
 //
-// it actually doesn't do anything...
+// localRecord handling
 //
 
 class plugin
@@ -14,6 +14,9 @@ class plugin
 		
 		this.name = 'LocalRecords';
 		this.desc = 'Local Records management plugin';
+		
+		this.settings = require('../include/settings');
+		this.utilities = require('../include/f.utilities');
 	}
 	
 	onFinish (params)
@@ -22,6 +25,28 @@ class plugin
 		// [0] int    : Player UId
 		// [1] string : login
 		// [2] int    : Time/Score
+		
+		let time = params[2],
+			login = params[1],
+			settings = this.settings,
+			utilities = this.utilities,
+			db = this.db,
+			server = this.server;
+		
+		server.query('GetCurrentChallengeInfo', [])
+			.then(challenge =>
+			{
+				let uid = challenge.UId;
+				
+				db.get().collection('records').find({track: uid})
+					.then(documents =>
+					{
+					
+					})
+			})
+		
+		
+		
 	}
 	
 	onCheckpoint (params)
@@ -50,6 +75,8 @@ class plugin
 		// [0] struct : ChallengeInfo (SChallengeInfo)
 		// [1] bool   : Is WarmUp?
 		// [2] bool   : Is Match Coninuation?
+		
+		
 	}
 	
 }

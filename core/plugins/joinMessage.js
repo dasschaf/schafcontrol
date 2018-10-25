@@ -1,8 +1,8 @@
 
 //
-// SchafControl sample plugin
+// SchafControl joinMessage plugin
 //
-// it actually doesn't do anything...
+// provides joinMessage and an always up-to-date Nickname in the database + joincounting
 //
 
 class plugin
@@ -28,84 +28,49 @@ class plugin
 		// [1] bool  : is Spectator?
 		
 		let login = params[0],
-			spec  = params[1];
+			spec  = params[1],
+			title = 'Player';
 		
 		if (this.settings.masteradmin.login === login)
-		{
-			let title = this.settings.masteradmin.title,
-				db = this.db,
-				server = this.server;
-			
-			server.query('GetPlayerInfo', [login, 1])
-				.then(info =>
-				{
-					let nickname = info.NickName;
-					
-					db.get().collection('players').findOneAndUpdate(
-						{login: login},
-						{
-							$inc: {joins: +1},
-							$set: {nickname: nickname}
-						},
-						{
-							upsert: true,
-							returnOriginal:false
-						}
-						)
-						.then (document =>
-						{
-							let player = document.value;
-							
-							let message = this.utilities.fill(this.dictionary.joinmessage,
-								{
-									title: title,
-									player: nickname,
-									nr: player.joins
-								});
-							
-							server.query('ChatSendServerMessage', [message]);
-						})
-					
-					
-					
-				});
-		}
+			title = this.settings.masteradmin.title;
 		
-		else
-		{
-			let title = 'Player',
-				db = this.db,
-				server = this.server;
-			
-			server.query('GetPlayerInfo', [login, 1])
-				.then(info =>
-				{
-					let nickname = info.NickName;
-					
-					let player = db.get().collection('players').findOneAndUpdate(
-						{login: login},
-						{
-							$inc: {joins: +1},
-							$set: {nickname: nickname}
-						},
-						{
-							upsert: true,
-							returnNewDocument:true
-						}
-					);
-					
-					let joins = player.joins;
-					
-					let message = this.utilities.fill(this.dictionary.joinmessage,
-						{
-							title: title,
-							player: nickname,
-							nr: joins
-						});
-					
-					server.query('ChatSendServerMessage', [message]);
-				});
-		}
+		let db = this.db,
+			server = this.server;
+	
+		
+		server.query('GetPlayerInfo', [login, 1])
+			.then(info =>
+			{
+				let nickname = info.NickName;
+				
+				db.get().collection('players').findOneAndUpdate(
+					{login: login},
+					{
+						$inc: {joins: +1},
+						$set: {nickname: nickname}
+					},
+					{
+						upsert: true,
+						returnOriginal:false
+					}
+					)
+					.then (document =>
+					{
+						let player = document.value;
+						
+						if (typeof document.title !== 'undefined')
+							title = document.title;
+						
+						let message = this.utilities.fill(this.dictionary.joinmessage,
+							{
+								title: title,
+								player: nickname,
+								nr: player.joins
+							});
+						
+						server.query('ChatSendServerMessage', [message]);
+					});
+			});
 	}
 	
 	onDisconnect (params)
