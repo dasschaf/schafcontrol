@@ -58,12 +58,14 @@ class plugin
 					.then(document =>
 					{
 						let track = document.value;
-
-						db.get().collection('records').find({track: uid})
+						
+						db.get().collection('records').findOne({track: uid, login: login})
 						.then(document =>
 							{
-								let records = document.value;
-							})
+								let record = document.value;
+
+								
+							});
 					});
 			})
 		
