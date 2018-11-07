@@ -38,11 +38,35 @@ class plugin
 			{
 				let uid = challenge.UId;
 				
-				db.get().collection('records').find({track: uid})
-					.then(documents =>
+				/*
+				 * plan:
+				 *
+				 * 1) update record if it is any better
+				 * 2) calculate rank and update rank in record
+				 * 3) post message
+				 */
+
+				 db.get().collection('tracks').findOneandUpdate(
+					{uid: uid}, 
 					{
-					
+						$set: challenge, 
+						$inc: {played: +1}
+					},
+					{
+						upsert: true
 					})
+					.then(document =>
+					{
+						let track = document.value;
+						
+						db.get().collection('records').findOne({track: uid, login: login})
+						.then(document =>
+							{
+								let record = document.value;
+
+								
+							});
+					});
 			})
 		
 		
