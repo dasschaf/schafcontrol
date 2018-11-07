@@ -12,21 +12,11 @@ class plugin
 		this.db = db;
 		this.server = server;
 		
-		this.name = 'Sample Plugin';
-		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
-	}
-	
-	onConnect (params)
-	{
-		// params:
-		// [0] string: login
-		// [1] bool  : is Spectator?
-	}
-	
-	onDisconnect (params)
-	{
-		// params:
-		// [0] string: login
+		this.name = 'Set library -- Title';
+		this.desc = 'Set library provides a variety of functions to set settings for yourself - this particular module provides support to set your custom title';
+
+		this.utilities = require('../include/f.utilities');
+		this.dictionary = require('../include/dictionary');
 	}
 	
 	onChat (params)
@@ -36,136 +26,34 @@ class plugin
 		// [1] string: login
 		// [2] string: message
 		// [3] bool  : is Command?
+
+		let command = params[2].split(' ');
+		let	db = this.db,
+			server = this.server,
+			utilities = this.utilities;
+
+		if (!params[3])
+			return;
+
+
+		if (command.shift() == '/set')
+			if (command.shift() == 'title')
+			{
+				let title = command.join(' ');
+
+				db.get().findOneAndUpdate({login: params[1]}, {$set: {title: title}}, {upsert: true, returnNewDocument: true})
+				.then(d =>
+					{
+						let document = d.value;
+
+						let message = utilities.fill(this.dictionary.titlechanged, {title: document.title});
+
+						server.query('ChatSendServerMessageToLogin', [message, document.login]);
+					})
+			}
 	}
 	
-	onFinish (params)
-	{
-		// params:
-		// [0] int    : Player UId
-		// [1] string : login
-		// [2] int    : Time/Score
-	}
-	
-	onCheckpoint (params)
-	{
-		// params:
-		// [0] int    : Player UId
-		// [1] string : Player login
-		// [2] int    : time/score
-		// [3] int    : Current Lap
-		// [4] int    : Checkpoint Number
-	}
-	
-	onChallengeEnd (params)
-	{
-		// params:
-		// [0] struct : PlayerRankings (SPlayerRankings[])
-		// [1] struct : ChallengeInfo  (SChallengeInfo)
-		// [2] bool   : Was WarmUp?
-		// [3] bool   : Match continues on next map?
-		// [4] bool   : Challenge Restart?
-	}
-	
-	onChallengeBegin (params)
-	{
-		// params:
-		// [0] struct : ChallengeInfo (SChallengeInfo)
-		// [1] bool   : Is WarmUp?
-		// [2] bool   : Is Match Coninuation?
-	}
-	
-	onRoundBegin (params)
-	{
-		// params:
-		// none.
-	}
-	
-	onRoundEnd (params)
-	{
-		// params:
-		// none.
-	}
-	
-	onRaceBegin (params)
-	{
-		// params:
-		// [1] struct : ChallengeInfo (SChallengeInfo)
-	}
-	
-	onRaceEnd (params)
-	{
-		// params:
-		// [0] struct : Player Rankings (SPlayerRankings[])
-		// [1] struct : Challenge Info (SChallengeInfo)
-	}
-	
-	onStatusChange (params)
-	{
-		// params:
-		// [0] int    : Status Number/Code
-		// [1] string : Status Name
-	}
-	
-	onBillUpdate (params)
-	{
-		// params:
-		// [0] int    : Bill ID
-		// [1] int    : State
-		// [2] string : State Name
-		// [3] int    : Transaction ID
-	}
-	
-	onPlayerInfoChange (params)
-	{
-		// params:
-		// [0] struct : Player Info
-	}
-	
-	onVoteUpdate (params)
-	{
-		// params:
-		// [0] string : State Name
-		// [1] string : Login
-		// [2] string : Command Name
-		// [3] string : Command param
-	}
-	
-	onFlowControlTransition (params)
-	{
-		// params:
-		// [0] string : Transition
-	}
-	
-	onChallengeListModified (params)
-	{
-		// params:
-		// [0] int    : Current Challenge Index
-		// [1] int    : Next Challenge Index
-		// [2] int    : Is List Modified?
-	}
-	
-	onTunnelDataRecieve (params)
-	{
-		// params:
-		// [0] int    : Player UId
-		// [1] string : Player Login
-		// [2] string : base64 encoded data
-	}
-	
-	onPlayerIncoherence (params)
-	{
-		// params:
-		// [0] int    : Player UId
-		// [1] string : Player Login
-	}
-	
-	onPlayerManialinkAnswer (params) {
-		// params:
-		// [0] int    : Player UId
-		// [1] string : Player Login
-		// [2] int    : Answer
-	}
-	
+
 }
 
 module.exports = (db, server) =>
