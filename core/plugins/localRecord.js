@@ -45,29 +45,36 @@ class plugin
 				 * 2) calculate rank and update rank in record
 				 * 3) post message
 				 */
-
-				 db.get().collection('tracks').findOneandUpdate(
-					{uid: uid}, 
+	
+				db.get().collection('records').findOneAndUpdate({track: uid, login: login},
 					{
-						$set: challenge, 
-						$inc: {played: +1}
+						$min: {time: time},
+						$setOnInsert: {time: time}
 					},
 					{
-						upsert: true
+						upsert: true,
+						returnNewDocument: true
 					})
-					.then(document =>
+				.then(document =>
 					{
-						let track = document.value;
-						
-						db.get().collection('records').findOne({track: uid, login: login})
-						.then(document =>
-							{
-								let record = document.value;
+						let record = document.value;
 
-								
-							});
+						if (record.time > time)
+						{
+							// here we go bois!
+							let place = db.get().collection('records').countDocuments({track: uid, time: {$lt: time}});
+
+							server.query('GetPlayerInfo', [login, 1])
+							.then(player =>
+								{
+									let nickname = player.NickName;
+
+									
+								});
+						}
 					});
-			})
+					
+			});
 		
 		
 		

@@ -12,5 +12,10 @@ module.exports =
 			});
 
 			return string;
+		},
+
+		calculateTime: (ms) =>
+		{
+			return new Date(ms).toLocaleTimeString();
 		}
 	};
