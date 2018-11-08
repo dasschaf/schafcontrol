@@ -17,6 +17,7 @@ class plugin
 		
 		this.settings = require('../include/settings');
 		this.utilities = require('../include/f.utilities');
+		this.dictionary = require('../include/dictionary');
 	}
 	
 	onFinish (params)
@@ -28,10 +29,10 @@ class plugin
 		
 		let time = params[2],
 			login = params[1],
-			settings = this.settings,
 			utilities = this.utilities,
 			db = this.db,
-			server = this.server;
+			server = this.server,
+			dictionary = this.dictionary;
 		
 		server.query('GetCurrentChallengeInfo', [])
 			.then(challenge =>
@@ -69,7 +70,11 @@ class plugin
 								{
 									let nickname = player.NickName;
 
-									
+									time = utilities.calculateTime(time);
+
+									let message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: time, place: place});
+
+									server.query('ChatSendServerMessage', [message]);
 								});
 						}
 					});
