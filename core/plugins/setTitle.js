@@ -41,7 +41,7 @@ class plugin
 			{
 				let title = command.join(' ');
 
-				db.get().findOneAndUpdate({login: params[1]}, {$set: {title: title}}, {upsert: true, returnNewDocument: true})
+				db.get().findOneAndUpdate({login: params[1]}, {$set: {title: title}}, {upsert: true, returnOriginal: false})
 				.then(d =>
 					{
 						let document = d.value;

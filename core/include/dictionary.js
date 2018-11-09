@@ -18,5 +18,5 @@ module.exports =
 
 		titlechanged: separators.private + '$z$s$fffYour title was changed to: %title%',
 
-		localrecord_new: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0%place$fff. local record! ($0ff%time%$fff)'
+		localrecord_new: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0%place%$fff. local record! ($0ff%time%$fff)'
 	};

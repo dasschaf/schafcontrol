@@ -33,6 +33,9 @@ class plugin
 			db = this.db,
 			server = this.server,
 			dictionary = this.dictionary;
+
+		if (time === 0)
+			return;
 		
 		server.query('GetCurrentChallengeInfo', [])
 			.then(challenge =>
@@ -47,17 +50,26 @@ class plugin
 				 * 3) post message
 				 */
 	
-				db.get().collection('records').findOneAndUpdate({track: uid, login: login},
+				db.get().collection('records').findOneAndUpdate(
 					{
-						$min: {time: time},
-						$setOnInsert: {time: time}
+						track: uid, 
+						login: login
+					},
+					{
+						$and:
+						[
+							{$max: {time: time}},
+							{$setOnInsert: {time: time}}
+						]
 					},
 					{
 						upsert: true,
-						returnNewDocument: true
+						returnOriginal: false
 					})
 				.then(document =>
 					{
+
+
 						let record = document.value;
 
 						if (record.time > time)
@@ -70,9 +82,9 @@ class plugin
 								{
 									let nickname = player.NickName;
 
-									time = utilities.calculateTime(time);
+									let tm = utilities.calculateTime(time);
 
-									let message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: time, place: place});
+									let message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: tm, place: place});
 
 									server.query('ChatSendServerMessage', [message]);
 								});
@@ -93,6 +105,13 @@ class plugin
 		// [2] int    : time/score
 		// [3] int    : Current Lap
 		// [4] int    : Checkpoint Number
+
+		let index = params[4],
+			login = params[1],
+			score = params[2],
+			lapnr = params[3];
+
+
 	}
 	
 	onChallengeEnd (params)
