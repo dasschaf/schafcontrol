@@ -14,6 +14,8 @@ class plugin
 		
 		this.name = 'Sample Plugin';
 		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
+
+		this.request = require('request');
 	}
 	onChat (params)
 	{
@@ -28,7 +30,8 @@ class plugin
 
 		let command = params[2].split(' '),
 			server = this.server,
-			db = this.db;
+			db = this.db,
+			request = this.request;
 
 		// check for admin:
 		// TODO
