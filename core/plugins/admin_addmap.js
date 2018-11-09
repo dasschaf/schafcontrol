@@ -23,7 +23,60 @@ class plugin
 		// [2] string: message
 		// [3] bool  : is Command?
 
-		
+		if (!params[3])
+			return;
+
+		let command = params[2].split(' '),
+			server = this.server,
+			db = this.db;
+
+		// check for admin:
+		// TODO
+
+		if (command.shift() == '/admin')
+			if (command.shift() == 'add')
+			{
+				let mode = command[0],
+					file = command[1],
+					para = command[2];
+
+				if (mode === 'tmx')
+				{
+					let id = file,
+						site = 'united';
+
+					if (para === 'tmn')
+						site = 'nations';
+
+					else if (para === 'tmo')
+						site = 'original';
+
+					else if (para === 'tmnf')
+						site = 'tmnforever';
+
+					else if (para === 'tms')
+						site = 'sunrise';
+
+					let link = 'https://' + site + '.tm-exchange.com/get.aspx?action=trackgbx&id=' + id;
+
+					request({url: link, encoding: 'binary'}, (error, response, body) =>
+						{
+							// if error: throw error.
+							if (error) throw error;
+							
+							if (response && response.statusCode == 200)
+							{
+								server.query('GetTracksDirectory').then(result =>
+								{
+									// get variables right
+									var targetDir = result + '/TMX/';
+									var abs_fn = targetDir + id + '.Challenge.Gbx';
+									var rel_fn = '/TMX/' + id + '.Challenge.Gbx';
+								});
+							}
+						});
+				}
+			}
 	}
 	
 }
