@@ -42,193 +42,205 @@ class plugin
 			utilities = this.utilities;
 
 		// check for admin:
-		// TODO
 
 		if (command.shift() == '/admin')
-			if (command.shift() == 'add')
 			{
-				let mode = command[0],
-					file = command[1],
-					para = command[2];
+				let task = command.shift()
 
-				if (mode === 'tmx')
+				if (task === 'add')
 				{
-					let id = file,
-						site = 'united';
+					let mode = command[0],
+						file = command[1],
+						para = command[2];
 
-					if (para === 'tmn')
-						site = 'nations';
+					if (mode === 'tmx')
+					{
+						let id = file,
+							site = 'united';
 
-					else if (para === 'tmo')
-						site = 'original';
+						if (para === 'tmn')
+							site = 'nations';
 
-					else if (para === 'tmnf')
-						site = 'tmnforever';
+						else if (para === 'tmo')
+							site = 'original';
 
-					else if (para === 'tms')
-						site = 'sunrise';
+						else if (para === 'tmnf')
+							site = 'tmnforever';
 
-					let link = 'https://' + site + '.tm-exchange.com/get.aspx?action=trackgbx&id=' + id;
+						else if (para === 'tms')
+							site = 'sunrise';
 
-					request({url: link, encoding: 'binary'}, (error, response, body) =>
-						{
-							// if error: throw error.
-							if (error) throw error;
-							
-							if (response && response.statusCode == 200)
+						let link = 'https://' + site + '.tm-exchange.com/get.aspx?action=trackgbx&id=' + id;
+
+						request({url: link, encoding: 'binary'}, (error, response, body) =>
 							{
-								server.query('GetTracksDirectory').then(result =>
+								// if error: throw error.
+								if (error) throw error;
+								
+								if (response && response.statusCode == 200)
 								{
-									// get variables right
-									var targetDir = result + '/TMX/';
-									var absolute_path = targetDir + id + '.Challenge.Gbx';
-									var relative_path = '/TMX/' + id + '.Challenge.Gbx';
+									server.query('GetTracksDirectory').then(result =>
+									{
+										// get variables right
+										var targetDir = result + '/TMX/';
+										var absolute_path = targetDir + id + '.Challenge.Gbx';
+										var relative_path = '/TMX/' + id + '.Challenge.Gbx';
 
-									// check if exists, if not, create
-									if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
+										// check if exists, if not, create
+										if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
 
-									// write file.
-									fs.writeFileSync(absolute_path, body, 'binary');
+										// write file.
+										fs.writeFileSync(absolute_path, body, 'binary');
 
-									server.query('InsertChalenge', [relative_path])
-									.then(result =>
-										{
-											server.query('GetChallengeInfo', [relative_path])
-											.then(result =>
-												{
-													let challenge = 
+										server.query('InsertChalenge', [relative_path])
+										.then(result =>
+											{
+												server.query('GetChallengeInfo', [relative_path])
+												.then(result =>
 													{
-														name: result.Name,
-														uid: result.UId,
-														filename: result.FileName,
-														author: result.Author,
-														mood: result.Mood,
-														medals:
-														[
-															result.AuthorTime,
-															result.GoldTime,
-															result.SilverTime,
-															result.BronzeTime
-														],
-														coppers: result.CopperPrice,
-														isMultilap: result.LapRace,
-														laps: result.NbLaps,
-														checkpoints: result.NbCheckpoints,
-														source: 'TMX'
-													};
-
-													db.get().collection('tracks').insertOne(challenge);
-													
-													db.get().collection('players').findOne({login: login})
-													.then(document =>
+														let challenge = 
 														{
-															let player = document.value;
+															name: result.Name,
+															uid: result.UId,
+															filename: result.FileName,
+															author: result.Author,
+															mood: result.Mood,
+															medals:
+															[
+																result.AuthorTime,
+																result.GoldTime,
+																result.SilverTime,
+																result.BronzeTime
+															],
+															coppers: result.CopperPrice,
+															isMultilap: result.LapRace,
+															laps: result.NbLaps,
+															checkpoints: result.NbCheckpoints,
+															source: 'TMX'
+														};
 
-															let title = player.title,
-																nickname = player.nickname;
+														db.get().collection('tracks').insertOne(challenge);
+														
+														db.get().collection('players').findOne({login: login})
+														.then(document =>
+															{
+																let player = document.value;
 
-															let message = utilities.fill(this.dictionary.admin_add_tmx,
-																{
-																	title: title,
-																	player: nickname,
-																	track: challenge.name,
-																	method: 'from TMX'
-																});
+																let title = player.title,
+																	nickname = player.nickname;
 
-															server.query('ChatSendServerMessage', [message]);
-														});
-												});
-										});
-								});
-							}
-						});
-				} // -- tmx --//
+																let message = utilities.fill(this.dictionary.admin_add_tmx,
+																	{
+																		title: title,
+																		player: nickname,
+																		track: challenge.name,
+																		method: 'from TMX'
+																	});
 
-				if (mode === 'url')
-				{
-					let link = file;
+																server.query('ChatSendServerMessage', [message]);
+															});
+													});
+											});
+									});
+								}
+							});
+					} // -- tmx --//
 
-					request({url: link, encoding: 'binary'}, (error, response, body) =>
-						{
-							// if error: throw error.
-							if (error) throw error;
-							
-							if (response && response.statusCode == 200)
+					if (mode === 'url')
+					{
+						let link = file;
+
+						request({url: link, encoding: 'binary'}, (error, response, body) =>
 							{
-								server.query('GetTracksDirectory').then(result =>
+								// if error: throw error.
+								if (error) throw error;
+								
+								if (response && response.statusCode == 200)
 								{
-									let spliturl = link.split('/');
-									let fn = spliturl[spliturl.length - 1];
+									server.query('GetTracksDirectory').then(result =>
+									{
+										let spliturl = link.split('/');
+										let fn = spliturl[spliturl.length - 1];
 
-									// get variables right
-									var targetDir = result + '/URL/';
-									var absolute_path = targetDir + fn + '.Challenge.Gbx';
-									var relative_path = '/URL/' + fn + '.Challenge.Gbx';
+										// get variables right
+										var targetDir = result + '/URL/';
+										var absolute_path = targetDir + fn + '.Challenge.Gbx';
+										var relative_path = '/URL/' + fn + '.Challenge.Gbx';
 
-									// check if exists, if not, create
-									if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
+										// check if exists, if not, create
+										if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
 
-									// write file.
-									fs.writeFileSync(absolute_path, body, 'binary');
+										// write file.
+										fs.writeFileSync(absolute_path, body, 'binary');
 
-									server.query('InsertChalenge', [relative_path])
-									.then(result =>
-										{
-											server.query('GetChallengeInfo', [relative_path])
-											.then(result =>
-												{
-													let challenge = 
+										server.query('InsertChalenge', [relative_path])
+										.then(result =>
+											{
+												server.query('GetChallengeInfo', [relative_path])
+												.then(result =>
 													{
-														name: result.Name,
-														uid: result.UId,
-														filename: result.FileName,
-														author: result.Author,
-														mood: result.Mood,
-														medals:
-														[
-															result.AuthorTime,
-															result.GoldTime,
-															result.SilverTime,
-															result.BronzeTime
-														],
-														coppers: result.CopperPrice,
-														isMultilap: result.LapRace,
-														laps: result.NbLaps,
-														checkpoints: result.NbCheckpoints,
-														source: 'url'
-													};
-
-													db.get().collection('tracks').insertOne(challenge);
-													
-													db.get().collection('players').findOne({login: login})
-													.then(document =>
+														let challenge = 
 														{
-															let player = document.value;
+															name: result.Name,
+															uid: result.UId,
+															filename: result.FileName,
+															author: result.Author,
+															mood: result.Mood,
+															medals:
+															[
+																result.AuthorTime,
+																result.GoldTime,
+																result.SilverTime,
+																result.BronzeTime
+															],
+															coppers: result.CopperPrice,
+															isMultilap: result.LapRace,
+															laps: result.NbLaps,
+															checkpoints: result.NbCheckpoints,
+															source: 'url'
+														};
 
-															let title = player.title,
-																nickname = player.nickname;
+														db.get().collection('tracks').insertOne(challenge);
+														
+														db.get().collection('players').findOne({login: login})
+														.then(document =>
+															{
+																let player = document.value;
 
-															let message = utilities.fill(this.dictionary.admin_add_tmx,
-																{
-																	title: title,
-																	player: nickname,
-																	track: challenge.name,
-																	method: 'from URL'
-																});
+																let title = player.title,
+																	nickname = player.nickname;
 
-															server.query('ChatSendServerMessage', [message]);
-														});
-												});
-										});
-								});
-							}
-						});
-				} //-- url --//
+																let message = utilities.fill(this.dictionary.admin_add_tmx,
+																	{
+																		title: title,
+																		player: nickname,
+																		track: challenge.name,
+																		method: 'from URL'
+																	});
 
-				if (mode === 'local')
+																server.query('ChatSendServerMessage', [message]);
+															});
+													});
+											});
+									});
+								}
+							});
+					} //-- url --//
+
+					if (mode === 'local')
+					{
+
+					} //-- local --//
+				}
+
+				if (task === 'writetracklist')
 				{
+					let tracklist = 'tracklist.txt';
 
-				} //-- local --//
+					server.query('SaveMatchSettings', [tracklist]);
+
+					server.query('ChatSendServerMessageToLogin', [this.dictionary.admin_writetracklist]);
+				}
 			}
 	}
 	
