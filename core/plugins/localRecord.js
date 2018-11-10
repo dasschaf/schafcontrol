@@ -53,14 +53,12 @@ class plugin
 				db.get().collection('records').findOneAndUpdate(
 					{
 						track: uid, 
-						login: login
+						login: login,
+						time: {$gt: time}
 					},
 					{
-						$and:
-						[
-							{$max: {time: time}},
-							{$setOnInsert: {time: time}}
-						]
+						
+						$set: {time: time}
 					},
 					{
 						upsert: true,
@@ -68,7 +66,6 @@ class plugin
 					})
 				.then(document =>
 					{
-
 
 						let record = document.value;
 
@@ -87,9 +84,34 @@ class plugin
 									let message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: tm, place: place});
 
 									server.query('ChatSendServerMessage', [message]);
+
+									console.log('- Running -: [DB] New Local Record (#' + place +') ' + time + ' by "' + login + '"');
 								});
 						}
 					});
+				
+					let obj = 
+					{
+						name: challenge.Name,
+						uid: challenge.UId,
+						filename: challenge.FileName,
+						author: challenge.Author,
+						mood: challenge.Mood,
+						medals:
+						[
+							challenge.AuthorTime,
+							challenge.GoldTime,
+							challenge.SilverTime,
+							challenge.BronzeTime
+						],
+						coppers: challenge.CopperPrice,
+						isMultilap: challenge.LapRace,
+						laps: challenge.NbLaps,
+						checkpoints: challenge.NbCheckpoints,
+						source: 'url'
+					};
+
+				db.get().collection('tracks').findOneandUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
 					
 			});
 		
@@ -106,10 +128,12 @@ class plugin
 		// [3] int    : Current Lap
 		// [4] int    : Checkpoint Number
 
-		let index = params[4],
+		let number = params[4],
 			login = params[1],
 			score = params[2],
-			lapnr = params[3];
+			lapnumber = params[3];
+
+		
 
 
 	}
