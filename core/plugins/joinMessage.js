@@ -47,7 +47,10 @@ class plugin
 					{login: login},
 					{
 						$inc: {joins: +1},
-						$set: {nickname: nickname}
+						$set: {
+							nickname: nickname,
+							title: title
+						}
 					},
 					{
 						upsert: true,
