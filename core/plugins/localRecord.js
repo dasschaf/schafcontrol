@@ -90,26 +90,7 @@ class plugin
 						}
 					});
 				
-					let obj = 
-					{
-						name: challenge.Name,
-						uid: challenge.UId,
-						filename: challenge.FileName,
-						author: challenge.Author,
-						mood: challenge.Mood,
-						medals:
-						[
-							challenge.AuthorTime,
-							challenge.GoldTime,
-							challenge.SilverTime,
-							challenge.BronzeTime
-						],
-						coppers: challenge.CopperPrice,
-						isMultilap: challenge.LapRace,
-						laps: challenge.NbLaps,
-						checkpoints: challenge.NbCheckpoints,
-						source: 'url'
-					};
+					let obj = this.makeChObj(challenge, 'unknown');
 
 				db.get().collection('tracks').findOneandUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
 					
@@ -146,6 +127,8 @@ class plugin
 		// [2] bool   : Was WarmUp?
 		// [3] bool   : Match continues on next map?
 		// [4] bool   : Challenge Restart?
+
+		
 	}
 	
 	onChallengeBegin (params)
@@ -158,6 +141,31 @@ class plugin
 		
 	}
 	
+	makeChObj (challenge, source)
+	{
+		let obj =
+		{
+			name: challenge.Name,
+			uid: challenge.UId,
+			filename: challenge.FileName,
+			author: challenge.Author,
+			mood: challenge.Mood,
+			medals:
+			[
+				challenge.AuthorTime,
+				challenge.GoldTime,
+				challenge.SilverTime,
+				challenge.BronzeTime
+			],
+			coppers: challenge.CopperPrice,
+			isMultilap: challenge.LapRace,
+			laps: challenge.NbLaps,
+			checkpoints: challenge.NbCheckpoints,
+			source: source
+		};
+
+		return obj;
+	}
 }
 
 module.exports = (db, server) =>

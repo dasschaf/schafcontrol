@@ -179,26 +179,7 @@ class plugin
 												server.query('GetChallengeInfo', [relative_path])
 												.then(result =>
 													{
-														let challenge = 
-														{
-															name: result.Name,
-															uid: result.UId,
-															filename: result.FileName,
-															author: result.Author,
-															mood: result.Mood,
-															medals:
-															[
-																result.AuthorTime,
-																result.GoldTime,
-																result.SilverTime,
-																result.BronzeTime
-															],
-															coppers: result.CopperPrice,
-															isMultilap: result.LapRace,
-															laps: result.NbLaps,
-															checkpoints: result.NbCheckpoints,
-															source: 'url'
-														};
+														let challenge = this.makeChObj(result, 'url');
 
 														db.get().collection('tracks').insertOne(challenge);
 														
@@ -229,7 +210,11 @@ class plugin
 
 					if (mode === 'local')
 					{
-
+						server.query('GetTracksDirectory')
+						.then(directory =>
+							{
+								let path = directory + file;
+							})
 					} //-- local --//
 				}
 
@@ -242,6 +227,32 @@ class plugin
 					server.query('ChatSendServerMessageToLogin', [this.dictionary.admin_writetracklist]);
 				}
 			}
+	}
+
+	makeChObj (challenge, source)
+	{
+		let obj =
+		{
+			name: challenge.Name,
+			uid: challenge.UId,
+			filename: challenge.FileName,
+			author: challenge.Author,
+			mood: challenge.Mood,
+			medals:
+			[
+				challenge.AuthorTime,
+				challenge.GoldTime,
+				challenge.SilverTime,
+				challenge.BronzeTime
+			],
+			coppers: challenge.CopperPrice,
+			isMultilap: challenge.LapRace,
+			laps: challenge.NbLaps,
+			checkpoints: challenge.NbCheckpoints,
+			source: source
+		};
+
+		return obj;
 	}
 	
 }
