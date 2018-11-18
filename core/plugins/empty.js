@@ -7,13 +7,22 @@
 
 class plugin
 {
-	constructor(db, server)
-	{
-		this.db = db;
-		this.server = server;
-		
+	constructor()
+	{		
 		this.name = 'Sample Plugin';
 		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
+
+		this.requiredConnections = 
+		{
+			server: true,		// 1st argument
+			database: true
+		};
+	}
+
+	init(server, db)
+	{
+		this.server = server;
+		this.db = db;
 	}
 
 	onConnect (params)

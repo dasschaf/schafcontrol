@@ -16,7 +16,7 @@ let settings = require('./settings.js');
 
 let server;
 module.exports.c = false;
-
+ 
 module.exports.connect = async () => {
 
     server = gbxremote.createClient(settings.server.port, settings.server.host);
