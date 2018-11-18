@@ -40,16 +40,19 @@ class plugin
 			if (command.shift() == 'title')
 			{
 				let title = command.join(' ');
+				if (title !== '')
+					db.get().collections('players').findOneAndUpdate({login: params[1]}, {$set: {title: title}}, {upsert: true, returnOriginal: false})
+					.then(d =>
+						{
+							let document = d.value;
 
-				db.get().findOneAndUpdate({login: params[1]}, {$set: {title: title}}, {upsert: true, returnOriginal: false})
-				.then(d =>
-					{
-						let document = d.value;
+							let message = utilities.fill(this.dictionary.titlechanged, {title: document.title});
 
-						let message = utilities.fill(this.dictionary.titlechanged, {title: document.title});
+							server.query('ChatSendServerMessageToLogin', [message, document.login]);
+						})
 
-						server.query('ChatSendServerMessageToLogin', [message, document.login]);
-					})
+				else
+					db.get().collections('players').findOne({login: params[1]})
 			}
 	}
 	

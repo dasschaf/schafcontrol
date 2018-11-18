@@ -214,6 +214,37 @@ class plugin
 						.then(directory =>
 							{
 								let path = directory + file;
+
+								server.query('InsertChallenge', [path])
+								.then(result =>
+									{
+										server.query('GetChallengeInfo', [path],
+										chinfo =>
+										{
+											let challenge = this.makeChObj(chinfo);
+
+											db.get().collection('tracks').insertOne(challenge);
+														
+											db.get().collection('players').findOne({login: login})
+											.then(document =>
+												{
+													let player = document.value;
+
+													let title = player.title,
+														nickname = player.nickname;
+
+													let message = utilities.fill(this.dictionary.admin_add_tmx,
+														{
+															title: title,
+															player: nickname,
+															track: challenge.name,
+															method: 'from URL'
+														});
+
+													server.query('ChatSendServerMessage', [message]);
+												});
+										})
+									})
 							})
 					} //-- local --//
 				}
