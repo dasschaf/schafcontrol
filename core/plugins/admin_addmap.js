@@ -7,10 +7,8 @@
 
 class plugin
 {
-	constructor(db, server)
+	constructor()
 	{
-		this.db = db;
-		this.server = server;
 		
 		this.name = 'Sample Plugin';
 		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
@@ -20,6 +18,19 @@ class plugin
 		this.settings = require('../include/settings');
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
+
+		this.requiredConnections = 
+		{
+			server: true,		// 1st argument
+			database: true
+		};
+
+	}
+
+	makeConnections(server, db)
+	{
+		this.server = server;
+		this.db = db;
 	}
 	onChat (params)
 	{
@@ -119,9 +130,9 @@ class plugin
 															source: 'TMX'
 														};
 
-														db.get().collection('tracks').insertOne(challenge);
+														db.collection('tracks').insertOne(challenge);
 														
-														db.get().collection('players').findOne({login: login})
+														db.collection('players').findOne({login: login})
 														.then(document =>
 															{
 																let player = document.value;
@@ -181,9 +192,9 @@ class plugin
 													{
 														let challenge = this.makeChObj(result, 'url');
 
-														db.get().collection('tracks').insertOne(challenge);
+														db.collection('tracks').insertOne(challenge);
 														
-														db.get().collection('players').findOne({login: login})
+														db.collection('players').findOne({login: login})
 														.then(document =>
 															{
 																let player = document.value;
@@ -223,9 +234,9 @@ class plugin
 										{
 											let challenge = this.makeChObj(chinfo);
 
-											db.get().collection('tracks').insertOne(challenge);
+											db.collection('tracks').insertOne(challenge);
 														
-											db.get().collection('players').findOne({login: login})
+											db.collection('players').findOne({login: login})
 											.then(document =>
 												{
 													let player = document.value;
@@ -288,7 +299,7 @@ class plugin
 	
 }
 
-module.exports = (db, server) =>
+module.exports = () =>
 {
-	return new plugin(db, server);
+	return new plugin();
 };

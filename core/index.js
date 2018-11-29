@@ -5,7 +5,8 @@
 //
 
 //-- require: node modules --//
-
+let express = require('express');
+let gbxremote = require('gbxremote');
 
 //-- require: other files --//
 let settings = require('./include/settings');
@@ -14,9 +15,10 @@ let modules = require('./include/f.modules');
 //-- set up connections variables --//
 //
 // 1: server
-let gbxremote = require('./include/c.server'),
-	server = gbxremote.createClient(settings.server.port, settings.server.host);
+// @ts-ignore
+let	server = gbxremote.createClient(settings.server.port, settings.server.host);
 
+// @ts-ignore
 server.on('connect', () =>
 {
 	server.query('Authenticate', [settings.server.login, settings.server.password]);
@@ -27,7 +29,6 @@ server.on('connect', () =>
 });
 
 // 2: database
-
 let mc = require('mongodb').MongoClient,
 	db;
 
@@ -40,6 +41,8 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 	
 	console.log('- Startup -: Successfully established a connection to the MongoDB server! (' + process.uptime() + ')');
 
+	// 3: expressjs for API
+	let app = express();
 
 	/*
 	*	Make plugin list:
@@ -60,6 +63,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		console.log('- Running -: Callback type \'' + method + '\' triggered. (' + process.uptime() + ')');
 	});*/
 	
+	// @ts-ignore
 	server.on('TrackMania.PlayerConnect', params =>
 	{
 		plugins.forEach(plugin =>
@@ -69,6 +73,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.PlayerDisconnect', params =>
 	{
 		plugins.forEach(plugin =>
@@ -78,6 +83,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.PlayerChat', params =>
 	{
 		plugins.forEach(plugin =>
@@ -87,6 +93,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.PlayerFinish', params =>
 	{
 		plugins.forEach(plugin =>
@@ -96,6 +103,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.PlayerCheckpoint', params =>
 	{
 		plugins.forEach(plugin =>
@@ -105,6 +113,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.BeginRace', params =>
 	{
 		plugins.forEach(plugin =>
@@ -114,6 +123,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.EndRace', params =>
 	{
 		plugins.forEach(plugin =>
@@ -123,6 +133,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.BeginChallenge', params =>
 	{
 		plugins.forEach(plugin =>
@@ -132,6 +143,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.EndChallenge', params =>
 	{
 		plugins.forEach(plugin =>
@@ -141,6 +153,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.BeginRound', params =>
 	{
 		plugins.forEach(plugin =>
@@ -150,6 +163,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.EndRound', params =>
 	{
 		plugins.forEach(plugin =>
@@ -159,6 +173,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.StatusChanged', params =>
 	{
 		plugins.forEach(plugin =>
@@ -168,6 +183,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.PlayerIncoherence', params =>
 	{
 		plugins.forEach(plugin =>
@@ -177,6 +193,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.BillUpdated', params =>
 	{
 		plugins.forEach(plugin =>
@@ -186,6 +203,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.TunnelDataRecieved', params =>
 	{
 		plugins.forEach(plugin =>
@@ -195,6 +213,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.ChallengeListModified', params =>
 	{
 		plugins.forEach(plugin =>
@@ -204,6 +223,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.PlayerInfoChanged', params =>
 	{
 		plugins.forEach(plugin =>
@@ -213,6 +233,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.ManualFlowControlTransition', params =>
 	{
 		plugins.forEach(plugin =>
@@ -222,6 +243,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.VoteUpdated', params =>
 	{
 		plugins.forEach(plugin =>
@@ -231,6 +253,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 	
+	// @ts-ignore
 	server.on('TrackMania.ManialinkPageAnswer', params =>
 	{
 		plugins.forEach(plugin =>
@@ -240,6 +263,10 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		});
 	});
 
-	
+	// 3: API <3
+	app.listen(settings.api.port, () =>
+	{
+		console.log('- Startup -: API server successfully starting and listening at port ' + settings.api.port + '. ('+ process.uptime() +')');
+	})
 });
 		

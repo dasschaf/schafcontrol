@@ -7,16 +7,25 @@
 
 class plugin
 {
-	constructor(db, server)
+	constructor()
 	{
-		this.db = db;
-		this.server = server;
 		
 		this.name = 'Set library -- Title';
 		this.desc = 'Set library provides a variety of functions to set settings for yourself - this particular module provides support to set your custom title';
 
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
+
+		this.requiredConnections = 
+		{
+			server: true,		// 1st argument
+			database: true
+		};
+	}
+	makeConnections(server, db)
+	{
+		this.server = server;
+		this.db = db;
 	}
 	
 	onChat (params)
@@ -41,7 +50,7 @@ class plugin
 			{
 				let title = command.join(' ');
 				if (title !== '')
-					db.get().collections('players').findOneAndUpdate({login: params[1]}, {$set: {title: title}}, {upsert: true, returnOriginal: false})
+					db.collections('players').findOneAndUpdate({login: params[1]}, {$set: {title: title}}, {upsert: true, returnOriginal: false})
 					.then(d =>
 						{
 							let document = d.value;
@@ -52,14 +61,14 @@ class plugin
 						})
 
 				else
-					db.get().collections('players').findOne({login: params[1]})
+					db.collections('players').findOne({login: params[1]})
 			}
 	}
 	
 
 }
 
-module.exports = (db, server) =>
+module.exports = () =>
 {
-	return new plugin(db, server);
+	return new plugin();
 };

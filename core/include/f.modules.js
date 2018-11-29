@@ -37,7 +37,7 @@ module.exports.make = (db, server) =>
 			console.log('- Startup -: PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
 			
 			if (pg.requiredConnections == {server: true, database: true})
-				pg.init(server, db);
+				pg.makeConnections(server, db);
 
 			return pg;
 		});

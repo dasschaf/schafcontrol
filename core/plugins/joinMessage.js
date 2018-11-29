@@ -8,17 +8,27 @@
 class plugin
 {
 	
-	constructor(db, server)
-	{
-		this.db = db;
-		this.server = server;
-		
+	constructor()
+	{		
 		this.name = 'JoinMessage';
 		this.desc = 'Plugin to provide messages for player joins, leaves and join stats.';
 		
 		this.settings = require('../include/settings');
 		this.dictionary = require('../include/dictionary');
 		this.utilities = require('../include/f.utilities');
+
+		this.requiredConnections = 
+		{
+			server: true,		// 1st argument
+			database: true
+		};
+
+	}
+
+	makeConnections(server, db)
+	{
+		this.server = server;
+		this.db = db;
 	}
 
 	onConnect (params)
@@ -43,7 +53,7 @@ class plugin
 			{
 				let nickname = info.NickName;
 				
-				db.get().collection('players').findOneAndUpdate(
+				db.collection('players').findOneAndUpdate(
 					{login: login},
 					{
 						$inc: {joins: +1},
@@ -83,7 +93,7 @@ class plugin
 	}
 }
 
-module.exports = (db, server) =>
+module.exports = () =>
 {
-	return new plugin(db, server);
+	return new plugin();
 };

@@ -7,16 +7,26 @@
 
 class plugin
 {
-	constructor(db, server)
+	constructor()
 	{
-		this.db = db;
-		this.server = server;
 		
 		this.name = 'WinnerCount';
 		this.desc = 'Provides stats for count of wins';
 		
 		this.dictionary = require('../include/dictionary');
 		this.utilities = require('../include/f.utilities');
+
+		this.requiredConnections = 
+		{
+			server: true,		// 1st argument
+			database: true
+		};
+	}
+
+	makeConnections(server, db)
+	{
+		this.server = server;
+		this.db = db;
 	}
 	
 	onRaceEnd (params)
@@ -41,7 +51,7 @@ class plugin
 		let login = winner.Login,
 			nickname = winner.NickName;
 		
-		db.get().collection('players').findOneAndUpdate(
+		db.collection('players').findOneAndUpdate(
 			{login: login},
 			{$inc: {wins: +1}},
 			{
@@ -67,7 +77,7 @@ class plugin
 	
 }
 
-module.exports = (db, server) =>
+module.exports = () =>
 {
-	return new plugin(db, server);
+	return new plugin();
 };

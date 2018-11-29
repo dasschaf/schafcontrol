@@ -7,10 +7,8 @@
 
 class plugin
 {
-	constructor(db, server)
+	constructor()
 	{
-		this.db = db;
-		this.server = server;
 		
 		this.name = 'LocalRecords';
 		this.desc = 'Local Records management plugin';
@@ -18,6 +16,18 @@ class plugin
 		this.settings = require('../include/settings');
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
+
+		this.requiredConnections = 
+		{
+			server: true,		// 1st argument
+			database: true
+		};
+	}
+
+	makeConnections(server, db)
+	{
+		this.server = server;
+		this.db = db;
 	}
 	
 	onFinish (params)
@@ -50,7 +60,7 @@ class plugin
 				 * 3) post message
 				 */
 	
-				db.get().collection('records').findOneAndUpdate(
+				db.collection('records').findOneAndUpdate(
 					{
 						track: uid, 
 						login: login,
@@ -72,7 +82,7 @@ class plugin
 						if (record.time > time)
 						{
 							// here we go bois!
-							let place = db.get().collection('records').countDocuments({track: uid, time: {$lt: time}});
+							let place = db.collection('records').countDocuments({track: uid, time: {$lt: time}});
 
 							server.query('GetPlayerInfo', [login, 1])
 							.then(player =>
@@ -92,7 +102,7 @@ class plugin
 				
 					let obj = this.makeChObj(challenge, 'unknown');
 
-				db.get().collection('tracks').findOneandUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
+				db.collection('tracks').findOneandUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
 					
 			});
 		
@@ -168,7 +178,7 @@ class plugin
 	}
 }
 
-module.exports = (db, server) =>
+module.exports = () =>
 {
-	return new plugin(db, server);
+	return new plugin();
 };
