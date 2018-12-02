@@ -54,7 +54,7 @@ class plugin
 				{
 					let uid = challenge.UId;
 
-					if (this.checkIfVotedAlready(login, uid, impact) !== true)
+					if (this.checkIfVotedAlready(login, uid, impact) != true)
 					{
 						this.db.collection('karma').findOneAndUpdate({uid: uid, login: login}, {$set: {vote: impact}}, {upsert: true}, () =>
 						{
@@ -126,16 +126,20 @@ class plugin
 	
 	checkIfVotedAlready(login, uid, vote)
 	{
+		let response;
+		
 		this.db.collection('karma').findOne({uid: uid, login: login}, (err, res) =>
 		{
 			if (err) throw err;
 
 			if (res.vote === vote)
-				return true;
+				response = true;
 
 			else
-				return false;
-		})
+				response = false;
+		});
+
+		return response;
 	}
 	
 }
