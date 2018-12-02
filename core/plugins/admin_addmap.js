@@ -54,9 +54,9 @@ class plugin
 
 		// check for admin:
 
-		if (command.shift() == '/admin')
+		if (command.shift() === '/admin')
 			{
-				let task = command.shift()
+				let task = command.shift();
 
 				if (task === 'add')
 				{
@@ -88,7 +88,7 @@ class plugin
 								// if error: throw error.
 								if (error) throw error;
 								
-								if (response && response.statusCode == 200)
+								if (response && response.statusCode === 200)
 								{
 									server.query('GetTracksDirectory').then(result =>
 									{
@@ -166,7 +166,7 @@ class plugin
 								// if error: throw error.
 								if (error) throw error;
 								
-								if (response && response.statusCode == 200)
+								if (response && response.statusCode === 200)
 								{
 									server.query('GetTracksDirectory').then(result =>
 									{
