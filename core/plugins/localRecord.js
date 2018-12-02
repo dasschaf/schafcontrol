@@ -124,7 +124,33 @@ class plugin
 			score = params[2],
 			lapnumber = params[3];
 
-		
+		this.server.query('GetCurrentChallengeInfo')
+		.then(challenge =>
+			{
+				let track = 
+					{
+						name: challenge.Name,
+						uid: challenge.UId,
+						filename: challenge.FileName,
+						author: challenge.Author,
+						mood: challenge.Mood,
+						medals:
+						[
+							challenge.AuthorTime,
+							challenge.GoldTime,
+							challenge.SilverTime,
+							challenge.BronzeTime
+						],
+						coppers: challenge.CopperPrice,
+						isMultilap: challenge.LapRace,
+						laps: challenge.NbLaps,
+						checkpoints: challenge.NbCheckpoints
+					};
+
+				let currentCP = lapnumber * track.checkpoints + number;
+
+				
+			});
 
 
 	}
