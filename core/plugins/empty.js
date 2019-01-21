@@ -21,10 +21,9 @@ class plugin
 
 	}
 
-	makeConnections(server, db)
+	makeConnections(connections)
 	{
-		this.server = server;
-		this.db = db;
+		this.conns = connections;
 	}
 
 	onConnect (params)

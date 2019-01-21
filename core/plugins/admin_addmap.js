@@ -27,10 +27,9 @@ class plugin
 
 	}
 
-	makeConnections(server, db)
+	makeConnections(connections)
 	{
-		this.server = server;
-		this.db = db;
+		this.conns = connections;
 	}
 	onChat (params)
 	{
@@ -45,8 +44,8 @@ class plugin
 
 		let command = params[2].split(' '),
 			login = params[1],
-			server = this.server,
-			db = this.db,
+			server = this.conns['server'],
+			db = this.conns['db'],
 			request = this.request,
 			fs = this.fs,
 			settings = this.settings,

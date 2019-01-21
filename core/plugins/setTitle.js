@@ -22,10 +22,9 @@ class plugin
 			database: true
 		};
 	}
-	makeConnections(server, db)
+	makeConnections(connections)
 	{
-		this.server = server;
-		this.db = db;
+		this.conns = connections;
 	}
 	
 	onChat (params)
@@ -37,8 +36,8 @@ class plugin
 		// [3] bool  : is Command?
 
 		let command = params[2].split(' ');
-		let	db = this.db,
-			server = this.server,
+		let	db = this.conns['db'],
+			server = this.conns['server'],
 			utilities = this.utilities;
 
 		if (!params[3])

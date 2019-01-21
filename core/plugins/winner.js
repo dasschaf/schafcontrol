@@ -23,10 +23,9 @@ class plugin
 		};
 	}
 
-	makeConnections(server, db)
+	makeConnections(connections)
 	{
-		this.server = server;
-		this.db = db;
+		this.conns = connections;
 	}
 	
 	onRaceEnd (params)
@@ -37,8 +36,8 @@ class plugin
 		
 		let ranking = params[0],
 			
-			db = this.db,
-			server = this.server;
+			db = this.conns['db'],
+			server = this.conns['server'];
 		
 		if (ranking.length < 2 || ranking[0].BestTime === '-1')
 		{

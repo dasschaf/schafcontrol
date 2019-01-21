@@ -28,10 +28,9 @@ class plugin
         this.karma = require('../settings/karma.json');
 	}
 
-	makeConnections(server, db)
+	makeConnections(connections)
 	{
-		this.server = server;
-		this.db = db;
+		this.conns = connections;
 	}
 
 	onChat (params)
@@ -49,16 +48,16 @@ class plugin
         {
             let impact = this.voted(message);
 
-			this.server.query('GetCurrentChallengeInfo')
+			this.conns['server'].query('GetCurrentChallengeInfo')
 			.then(challenge =>
 				{
 					let uid = challenge.UId;
 
 					if (this.checkIfVotedAlready(login, uid, impact) != true)
 					{
-						this.db.collection('karma').findOneAndUpdate({uid: uid, login: login}, {$set: {vote: impact}}, {upsert: true}, () =>
+						this.conns['db'].collection('karma').findOneAndUpdate({uid: uid, login: login}, {$set: {vote: impact}}, {upsert: true}, () =>
 						{
-							this.db.collection('karma').find({uid: uid}).toArray((err, result) =>
+							this.conns['db'].collection('karma').find({uid: uid}).toArray((err, result) =>
 							{
 								if (err) throw err;
 								let pos = 0,
@@ -128,7 +127,7 @@ class plugin
 	{
 		let response;
 		
-		this.db.collection('karma').findOne({uid: uid, login: login}, (err, res) =>
+		this.conns['db'].collection('karma').findOne({uid: uid, login: login}, (err, res) =>
 		{
 			if (err) throw err;
 

@@ -7,10 +7,13 @@
 
 class plugin
 {
-	constructor(db, server)
+	constructor()
 	{
-		this.db = db;
-		this.server = server;
+		this.requiredConnections =
+		{
+			server: true,
+			database: true
+		};
 		
 		this.name = 'Sample Plugin';
 		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
@@ -21,6 +24,12 @@ class plugin
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
 	}
+
+	makeConnections(connections)
+	{
+		this.conns = connections;
+	}
+
 	onChat (params)
 	{
 		// params:
@@ -34,8 +43,8 @@ class plugin
 
 		let command = params[2].split(' '),
 			login = params[1],
-			server = this.server,
-			db = this.db,
+			db = this.conns['db'],
+			server = this.conns['server'];
 			request = this.request,
 			fs = this.fs,
 			settings = this.settings,

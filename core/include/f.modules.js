@@ -32,12 +32,16 @@ module.exports.make = (db, server) =>
 
 		let list = rawlist.map(cv =>
 		{
-			let pg = require(cv);
+			let pg = require(cv),
+				conns;
 			
 			console.log('- Startup -: PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
 			
-			if (pg.requiredConnections == {server: true, database: true})
-				pg.makeConnections(server, db);
+			if ('server' in pg.requiredConnections)
+				conns['server'] = server;
+
+			if ('db' in pg.requiredConnections)
+				conns['db'] = db;
 
 			return pg;
 		});

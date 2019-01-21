@@ -25,10 +25,9 @@ class plugin
 
 	}
 
-	makeConnections(server, db)
+	makeConnections(connections)
 	{
-		this.server = server;
-		this.db = db;
+		this.conns = connections;
 	}
 
 	onConnect (params)
@@ -44,8 +43,8 @@ class plugin
 		if (this.settings.masteradmin.login === login)
 			title = this.settings.masteradmin.title;
 		
-		let db = this.db,
-			server = this.server;
+		let db = this.conns['db'],
+			server = this.conns['server'];
 	
 		
 		server.query('GetPlayerInfo', [login, 1])

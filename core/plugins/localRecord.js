@@ -24,10 +24,9 @@ class plugin
 		};
 	}
 
-	makeConnections(server, db)
+	makeConnections(connections)
 	{
-		this.server = server;
-		this.db = db;
+		this.conns = connections;
 	}
 	
 	onFinish (params)
@@ -40,8 +39,8 @@ class plugin
 		let time = params[2],
 			login = params[1],
 			utilities = this.utilities,
-			db = this.db,
-			server = this.server,
+			db = this.conns['server'],
+			server = this.conns['server'],
 			dictionary = this.dictionary;
 
 		if (time === 0)
@@ -124,7 +123,7 @@ class plugin
 			score = params[2],
 			lapnumber = params[3];
 
-		this.server.query('GetCurrentChallengeInfo')
+		this.conns['server'].query('GetCurrentChallengeInfo')
 		.then(challenge =>
 			{
 				let track = 
