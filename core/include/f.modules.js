@@ -5,6 +5,7 @@
 
 //-- require: node modules --/
 let fs = require('fs');
+let chalk = require('chalk');
 
 //-- require: other files --/
 let settings = require('./settings');
@@ -19,7 +20,7 @@ module.exports.make = (db, server) =>
 		
 		let rawlist = [];
 		
-		console.log('\n- Startup -: Loading Plugins: ('  + process.uptime() + ')\n');
+		console.log('\n' + chalk.green('- Startup -') + ': Loading Plugins: ('  + process.uptime() + ')\n');
 		
 		files.forEach(file =>
 		{
@@ -32,21 +33,23 @@ module.exports.make = (db, server) =>
 
 		let list = rawlist.map(cv =>
 		{
-			let pg = require(cv),
-				conns;
-			
-			console.log('- Startup -: PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
-			
-			if ('server' in pg.requiredConnections)
-				conns['server'] = server;
 
-			if ('db' in pg.requiredConnections)
-				conns['db'] = db;
+			let pg = require(cv);
+			
+			console.log(chalk.green('- Startup -') + ': PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
+
+			pg.conns = {};
+			
+			//if ('server' in pg.requiredConnections)
+				pg.conns.server = server;
+
+			//if ('db' in pg.requiredConnections)
+				pg.conns.db = db;
 
 			return pg;
 		});
 		
-		console.log('\n- Startup -: Plugins loaded! ('  + process.uptime() + ')');
+		console.log('\n' + chalk.green('- Startup -') + ': Plugins loaded! ('  + process.uptime() + ')');
 		
 		return list;
 	};

@@ -7,10 +7,13 @@
 //-- require: node modules --//
 let express = require('express');
 let gbxremote = require('gbxremote');
+let chalk = require('chalk');
 
 //-- require: other files --//
 let settings = require('./include/settings');
 let modules = require('./include/f.modules');
+
+console.log(chalk.blue.underline('SchafControl is starting...\n'));
 
 //-- set up connections variables --//
 //
@@ -25,7 +28,8 @@ server.on('connect', () =>
 
 	server.query('EnableCallbacks', [true]);
 
-	console.log('- Startup -: Successfully established a connection to the TrackMania server! (' + process.uptime() + ')');
+	console.log(chalk.green('- Startup -') + ': Successfully established a connection to the TrackMania server! (' + process.uptime() + ')');
+	server.query('ChatSendServerMessage', ['SchafControl is starting!']);
 });
 
 // 2: database
@@ -39,7 +43,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 
 	db = client.db(settings.mongodb.db);
 	
-	console.log('- Startup -: Successfully established a connection to the MongoDB server! (' + process.uptime() + ')');
+	console.log(chalk.green('- Startup -') + ': Successfully established a connection to the MongoDB server! (' + process.uptime() + ')');
 
 	// 3: expressjs for API
 	let app = express();
@@ -49,7 +53,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 	*/
 	let plugins = modules.make(db, server);
 	
-	console.log('- Startup -: Plugin list successfully built! (' + process.uptime() + ')\n\n- Running -: Listenning now to Callbacks and events. ('+ process.uptime() +')');
+	console.log(chalk.green('- Startup -') + ': Plugin list successfully built! (' + process.uptime() + ')\n\n' + chalk.greenBright.bold('- Running -') + ': Listenning now to Callbacks and events. ('+ process.uptime() +')');
 	
 	/*
 		* TrackMania Server Callback Handling:
@@ -266,7 +270,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 	// 3: API <3
 	app.listen(settings.api.port, () =>
 	{
-		console.log('- Startup -: API server successfully starting and listening at port ' + settings.api.port + '. ('+ process.uptime() +')');
+		console.log(chalk.green('- Startup -') + ': API server successfully starting and listening at port ' + settings.api.port + '. ('+ process.uptime() +')');
 	})
 });
 		

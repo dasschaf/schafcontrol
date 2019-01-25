@@ -28,11 +28,6 @@ class plugin
         this.karma = require('../settings/karma.json');
 	}
 
-	makeConnections(connections)
-	{
-		this.conns = connections;
-	}
-
 	onChat (params)
 	{
 		// params:
@@ -44,7 +39,7 @@ class plugin
         let message = params[2],
             login = params[1];
 
-        if (this.voted(message) != 0)
+        if (this.voted(message) !== 0)
         {
             let impact = this.voted(message);
 
@@ -53,7 +48,7 @@ class plugin
 				{
 					let uid = challenge.UId;
 
-					if (this.checkIfVotedAlready(login, uid, impact) != true)
+					if (this.checkIfVotedAlready(login, uid, impact) !== true)
 					{
 						this.conns['db'].collection('karma').findOneAndUpdate({uid: uid, login: login}, {$set: {vote: impact}}, {upsert: true}, () =>
 						{
@@ -114,10 +109,10 @@ class plugin
     
     voted (message)
     {
-        if (message == '/++' || message == '++')
+        if (message === '/++' || message === '++')
         return 1;
 
-        if (message == '/--' || message == '--')
+        if (message === '/--' || message === '--')
         return -1;
 
         return 0;
@@ -143,7 +138,4 @@ class plugin
 	
 }
 
-module.exports = () =>
-{
-	return new plugin();
-};
+module.exports = new plugin();

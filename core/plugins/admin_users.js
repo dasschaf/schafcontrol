@@ -15,7 +15,7 @@ class plugin
 			database: true
 		};
 		
-		this.name = 'Sample Plugin';
+		this.name = 'Admin - User handling';
 		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
 
 		this.request = require('request');
@@ -24,12 +24,6 @@ class plugin
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
 	}
-
-	makeConnections(connections)
-	{
-		this.conns = connections;
-	}
-
 	onChat (params)
 	{
 		// params:
@@ -44,7 +38,7 @@ class plugin
 		let command = params[2].split(' '),
 			login = params[1],
 			db = this.conns['db'],
-			server = this.conns['server'];
+			server = this.conns['server'],
 			request = this.request,
 			fs = this.fs,
 			settings = this.settings,
@@ -73,7 +67,4 @@ class plugin
 	
 }
 
-module.exports = (db, server) =>
-{
-	return new plugin(db, server);
-};
+module.exports = new plugin();

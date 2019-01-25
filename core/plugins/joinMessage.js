@@ -25,11 +25,6 @@ class plugin
 
 	}
 
-	makeConnections(connections)
-	{
-		this.conns = connections;
-	}
-
 	onConnect (params)
 	{
 		// params:
@@ -43,8 +38,8 @@ class plugin
 		if (this.settings.masteradmin.login === login)
 			title = this.settings.masteradmin.title;
 		
-		let db = this.conns['db'],
-			server = this.conns['server'];
+		let db = this.conns.db,
+			server = this.conns.server;
 	
 		
 		server.query('GetPlayerInfo', [login, 1])
@@ -92,7 +87,4 @@ class plugin
 	}
 }
 
-module.exports = () =>
-{
-	return new plugin();
-};
+module.exports = new plugin();

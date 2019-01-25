@@ -22,11 +22,6 @@ class plugin
 			database: true
 		};
 	}
-
-	makeConnections(connections)
-	{
-		this.conns = connections;
-	}
 	
 	onRaceEnd (params)
 	{
@@ -76,7 +71,4 @@ class plugin
 	
 }
 
-module.exports = () =>
-{
-	return new plugin();
-};
+module.exports = new plugin();

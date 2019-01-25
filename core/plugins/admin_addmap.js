@@ -10,7 +10,7 @@ class plugin
 	constructor()
 	{
 		
-		this.name = 'Sample Plugin';
+		this.name = 'Admin - Add Map';
 		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
 
 		this.request = require('request');
@@ -27,10 +27,6 @@ class plugin
 
 	}
 
-	makeConnections(connections)
-	{
-		this.conns = connections;
-	}
 	onChat (params)
 	{
 		// params:
@@ -102,7 +98,7 @@ class plugin
 										// write file.
 										fs.writeFileSync(absolute_path, body, 'binary');
 
-										server.query('InsertChalenge', [relative_path])
+										server.query('InsertChallenge', [relative_path])
 										.then(result =>
 											{
 												server.query('GetChallengeInfo', [relative_path])
@@ -134,10 +130,10 @@ class plugin
 														db.collection('players').findOne({login: login})
 														.then(document =>
 															{
-																let player = document.value;
+																let player = document;
 
-																let title = player.title,
-																	nickname = player.nickname;
+																let title = this.settings.masteradmin.login === login ? this.settings.masteradmin.title : player.title;
+																let nickname = player.nickname;
 
 																let message = utilities.fill(this.dictionary.admin_add_tmx,
 																	{
@@ -183,7 +179,7 @@ class plugin
 										// write file.
 										fs.writeFileSync(absolute_path, body, 'binary');
 
-										server.query('InsertChalenge', [relative_path])
+										server.query('InsertChallenge', [relative_path])
 										.then(result =>
 											{
 												server.query('GetChallengeInfo', [relative_path])
@@ -196,7 +192,7 @@ class plugin
 														db.collection('players').findOne({login: login})
 														.then(document =>
 															{
-																let player = document.value;
+																let player = document;
 
 																let title = player.title,
 																	nickname = player.nickname;
@@ -238,7 +234,7 @@ class plugin
 											db.collection('players').findOne({login: login})
 											.then(document =>
 												{
-													let player = document.value;
+													let player = document;
 
 													let title = player.title,
 														nickname = player.nickname;
@@ -263,7 +259,7 @@ class plugin
 				{
 					let tracklist = 'tracklist.txt';
 
-					server.query('SaveMatchSettings', [tracklist]);
+					server.query('SaveMatchSettings', tracklist);
 
 					server.query('ChatSendServerMessageToLogin', [this.dictionary.admin_writetracklist]);
 				}
@@ -298,7 +294,4 @@ class plugin
 	
 }
 
-module.exports = () =>
-{
-	return new plugin();
-};
+module.exports = new plugin();

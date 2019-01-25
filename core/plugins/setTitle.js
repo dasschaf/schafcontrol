@@ -10,7 +10,7 @@ class plugin
 	constructor()
 	{
 		
-		this.name = 'Set library -- Title';
+		this.name = 'Set - Title';
 		this.desc = 'Set library provides a variety of functions to set settings for yourself - this particular module provides support to set your custom title';
 
 		this.utilities = require('../include/f.utilities');
@@ -22,11 +22,8 @@ class plugin
 			database: true
 		};
 	}
-	makeConnections(connections)
-	{
-		this.conns = connections;
-	}
 	
+	/*
 	onChat (params)
 	{
 		// params:
@@ -63,11 +60,8 @@ class plugin
 					db.collections('players').findOne({login: params[1]})
 			}
 	}
-	
+	*/
 
 }
 
-module.exports = () =>
-{
-	return new plugin();
-};
+module.exports = new plugin();

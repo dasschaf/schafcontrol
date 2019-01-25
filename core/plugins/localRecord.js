@@ -23,11 +23,6 @@ class plugin
 			database: true
 		};
 	}
-
-	makeConnections(connections)
-	{
-		this.conns = connections;
-	}
 	
 	onFinish (params)
 	{
@@ -39,7 +34,7 @@ class plugin
 		let time = params[2],
 			login = params[1],
 			utilities = this.utilities,
-			db = this.conns['server'],
+			db = this.conns['db'],
 			server = this.conns['server'],
 			dictionary = this.dictionary;
 
@@ -50,7 +45,8 @@ class plugin
 			.then(challenge =>
 			{
 				let uid = challenge.UId;
-				
+				console.log('Getting UID: ' + uid);
+				console.log('time: ' +time);
 				/*
 				 * plan:
 				 *
@@ -63,7 +59,7 @@ class plugin
 					{
 						track: uid, 
 						login: login,
-						time: {$gt: time}
+						time: {"$gt": time}
 					},
 					{
 						
@@ -77,31 +73,38 @@ class plugin
 					{
 
 						let record = document.value;
+						console.log('Updating Record: ' + JSON.stringify(record));
 
 						if (record.time > time)
 						{
 							// here we go bois!
-							let place = db.collection('records').countDocuments({track: uid, time: {$lt: time}});
-
-							server.query('GetPlayerInfo', [login, 1])
-							.then(player =>
+							db.collection('records').countDocuments({track: uid, time: {$lt: time}}, {}, _place =>
 								{
-									let nickname = player.NickName;
+									console.log(JSON.stringify(_place));
 
-									let tm = utilities.calculateTime(time);
+									let place = _place + 1;
+									console.log('Getting place: ' + place);
 
-									let message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: tm, place: place});
+									server.query('GetPlayerInfo', [login, 1])
+									.then(player =>
+										{
+											let nickname = player.NickName;
 
-									server.query('ChatSendServerMessage', [message]);
+											let tm = utilities.calculateTime(time);
 
-									console.log('- Running -: [DB] New Local Record (#' + place +') ' + time + ' by "' + login + '"');
+											let message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: tm, place: place});
+
+											server.query('ChatSendServerMessage', [message]);
+
+											console.log('- Running -: [DB] New Local Record (#' + place +') ' + time + ' by "' + login + '"');
+										});
 								});
 						}
 					});
 				
 					let obj = this.makeChObj(challenge, 'unknown');
 
-				db.collection('tracks').findOneandUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
+				db.collection('tracks').findOneAndUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
 					
 			});
 		
@@ -123,6 +126,7 @@ class plugin
 			score = params[2],
 			lapnumber = params[3];
 
+		/*
 		this.conns['server'].query('GetCurrentChallengeInfo')
 		.then(challenge =>
 			{
@@ -150,7 +154,7 @@ class plugin
 
 				
 			});
-
+		*/
 
 	}
 	
@@ -203,7 +207,4 @@ class plugin
 	}
 }
 
-module.exports = () =>
-{
-	return new plugin();
-};
+module.exports = new plugin();

@@ -21,11 +21,6 @@ class plugin
 
 	}
 
-	makeConnections(connections)
-	{
-		this.conns = connections;
-	}
-
 	onConnect (params)
 	{
 		// params:
@@ -178,7 +173,4 @@ class plugin
 	
 }
 
-module.exports = () =>
-{
-	return new plugin();
-};
+module.exports = new plugin();
