@@ -84,6 +84,15 @@ class plugin
 	{
 		// params:
 		// [0] string: login
+
+		let login = params[0],
+			spec  = params[1],
+			title = 'Player';
+		
+		if (this.settings.masteradmin.login === login)
+			title = this.settings.masteradmin.title;
+
+		
 	}
 }
 

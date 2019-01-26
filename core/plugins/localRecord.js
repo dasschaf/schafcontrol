@@ -17,6 +17,8 @@ class plugin
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
 
+		this.chalk = require('chalk');
+
 		this.requiredConnections = 
 		{
 			server: true,		// 1st argument
@@ -36,7 +38,8 @@ class plugin
 			utilities = this.utilities,
 			db = this.conns['db'],
 			server = this.conns['server'],
-			dictionary = this.dictionary;
+			dictionary = this.dictionary,
+			chalk = this.chalk;
 
 		if (time === 0)
 			return;
@@ -46,7 +49,7 @@ class plugin
 			{
 				let uid = challenge.UId;
 				console.log('Getting UID: ' + uid);
-				console.log('time: ' +time);
+				console.log('time: ' + time);
 				/*
 				 * plan:
 				 *
@@ -55,57 +58,136 @@ class plugin
 				 * 3) post message
 				 */
 	
-				db.collection('records').findOneAndUpdate(
+				db.collection('records').findOne(
 					{
-						track: uid, 
-						login: login,
-						time: {"$gt": time}
-					},
-					{
-						
-						$set: {time: time}
-					},
-					{
-						upsert: true,
-						returnOriginal: false
+						$and:
+						[	{track: uid}, 
+							{login: login}	]
 					})
 				.then(document =>
 					{
+						console.log('Document matching Query:\n' + JSON.stringify(document));
 
-						let record = document.value;
-						console.log('Updating Record: ' + JSON.stringify(record));
-
-						if (record.time > time)
+						if (document === null)
 						{
-							// here we go bois!
-							db.collection('records').countDocuments({track: uid, time: {$lt: time}}, {}, _place =>
+							// create new record:
+							let record =
+							{
+								track: uid,
+								login: login,
+								time: time
+							};
+
+							db.collection('records').insertOne(record)
+							.then(result =>
 								{
-									console.log(JSON.stringify(_place));
+									console.log('Insertion result: ' + result);
 
-									let place = _place + 1;
-									console.log('Getting place: ' + place);
-
-									server.query('GetPlayerInfo', [login, 1])
-									.then(player =>
+									db.collection('records').countDocuments({$and: [{track: uid}, {time: {$lt: time}}]})
+									.then(place =>
 										{
-											let nickname = player.NickName;
+											place = place + 1;
 
-											let tm = utilities.calculateTime(time);
+											server.query('GetPlayerInfo', [login, 1])
+											.then(playerInfo =>
+												{
+													let nickname = playerInfo.NickName,
+														_time = utilities.calculateTime(time),
 
-											let message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: tm, place: place});
+														message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: _time, place: place});
 
-											server.query('ChatSendServerMessage', [message]);
+													server.query('ChatSendServerMessage', message);
 
-											console.log('- Running -: [DB] New Local Record (#' + place +') ' + time + ' by "' + login + '"');
+													console.log(chalk.greenBright('- Running -') + `: [Local Records] - New Local Record (#${place}) by ${login} on ${challenge.Name}; (${time} ms)`);
+												})
+
+											.catch(error =>
+												{
+													console.log(chalk.red('- SERVER ERROR -') + ': ' + error);
+												});												
+										})
+
+									.catch(error =>
+										{
+											console.log(chalk.red('- DB ERROR -') + ': ' + error);
 										});
+								})
+							
+							.catch(error =>
+								{
+									console.log(chalk.red('- DB ERROR -') + ': ' + error);
 								});
 						}
+
+						if (document.time <= time)
+							return; //abort!
+						
+						if (document.time > time)
+						{
+							// better time
+
+							db.collection('records').findOneAndUpdate(
+								{
+									$and:
+									[	{track: uid},
+										{login: login}	]
+								},
+
+								{
+									$set: {time: time}
+								},
+
+								{
+									returnOriginal: false
+								}
+							)
+							.then(document =>
+								{
+									db.collection('records').countDocuments({$and: [{track: uid}, {time: {$lt: time}}]})
+									.then(place =>
+										{
+											place = place + 1;
+
+											server.query('GetPlayerInfo', [login, 1])
+											.then(playerInfo =>
+												{
+													let nickname = playerInfo.NickName,
+														_time = utilities.calculateTime(time),
+
+														message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: _time, place: place});
+
+													server.query('ChatSendServerMessage', message);
+
+													console.log(chalk.greenBright('- Running -') + `: [Local Records] - New Local Record (#${place}) by ${login} on ${challenge.Name}; (${time} ms)`);
+												})
+
+											.catch(error =>
+												{
+													console.log(chalk.red('- SERVER ERROR -') + ': ' + error);
+												});												
+										})
+
+									.catch(error =>
+										{
+											console.log(chalk.red('- DB ERROR -') + ': ' + error);
+										});
+								})
+							
+							.catch(error =>
+								{
+									console.log(chalk.red('- DB ERROR -') + ': ' + error);
+								});
+
+						}
+					})
+					.catch(error =>
+					{
+						console.log(chalk.red('- DB ERROR -') + ': ' + error);
 					});
 				
-					let obj = this.makeChObj(challenge, 'unknown');
+				let obj = this.makeChObj(challenge, 'unknown');
 
 				db.collection('tracks').findOneAndUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
-					
 			});
 		
 		

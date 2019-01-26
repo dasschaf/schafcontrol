@@ -14,9 +14,24 @@ module.exports =
 			return string;
 		},
 
-		calculateTime: (ms) =>
+		calculateTime: (time) =>
 		{
-			return new Date(ms).toLocaleTimeString();
+			// quick mafhs!
+			var minutes = Math.floor(time / (1000 * 60));
+			var seconds = Math.floor((time - (minutes * 1000 * 60)) / 1000);
+			var hundredth = Math.floor((time - (seconds * 1000 + minutes * 1000 * 60)) / 10);
+			var string = '';
+	
+			// 1 + '1' = 11 - 1 = 10!
+	
+			if (seconds < 10) seconds = "0" + seconds;
+			if (hundredth < 10 && hundredth !== 0) hundredth = "0" + hundredth;
+			if (hundredth === 0) hundredth = "00";
+	
+			if (minutes === 0) string = seconds + '.' + hundredth;
+			if (minutes !== 0) string = minutes + ':' + seconds + '.' + hundredth;
+	
+			return string;
 		},
 
 		formatting_tm2html: (string) =>
