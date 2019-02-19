@@ -43,7 +43,7 @@ module.exports.make = (db, server) =>
 			//if ('server' in pg.requiredConnections)
 				pg.conns.server = server;
 
-			//if ('db' in pg.requiredConnections)
+			//if ('database' in pg.requiredConnections)
 				pg.conns.db = db;
 
 			return pg;
