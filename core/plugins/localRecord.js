@@ -68,6 +68,7 @@ class plugin
 					{
 						console.log('Document matching Query:\n' + JSON.stringify(document));
 
+						// absolutely new rec
 						if (document === null)
 						{
 							// create new record:
@@ -80,12 +81,14 @@ class plugin
 
 							db.collection('records').insertOne(record)
 							.then(result =>
+
 								{
 									console.log('Insertion result: ' + result);
 
 									db.collection('records').countDocuments({$and: [{track: uid}, {time: {$lt: time}}]})
 									.then(place =>
 										{
+											
 											place = place + 1;
 
 											server.query('GetPlayerInfo', [login, 1])
@@ -122,6 +125,7 @@ class plugin
 						if (document.time <= time)
 							return; //abort!
 						
+						// better rec
 						if (document.time > time)
 						{
 							// better time
@@ -141,11 +145,14 @@ class plugin
 									returnOriginal: false
 								}
 							)
+
 							.then(document =>
 								{
+
 									db.collection('records').countDocuments({$and: [{track: uid}, {time: {$lt: time}}]})
 									.then(place =>
 										{
+
 											place = place + 1;
 
 											server.query('GetPlayerInfo', [login, 1])
@@ -153,8 +160,9 @@ class plugin
 												{
 													let nickname = playerInfo.NickName,
 														_time = utilities.calculateTime(time),
+														improvement = utilities.calculateTime(time - document.time),
 
-														message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: _time, place: place});
+														message = utilities.fill(dictionary.localrecord_imp, {nickname: nickname, time: _time, place: place, imp: improvement});
 
 													server.query('ChatSendServerMessage', message);
 
@@ -192,52 +200,6 @@ class plugin
 		
 		
 		
-	}
-	
-	onCheckpoint (params)
-	{
-		// params:
-		// [0] int    : Player UId
-		// [1] string : Player login
-		// [2] int    : time/score
-		// [3] int    : Current Lap
-		// [4] int    : Checkpoint Number
-
-		let number = params[4],
-			login = params[1],
-			score = params[2],
-			lapnumber = params[3];
-
-		/*
-		this.conns['server'].query('GetCurrentChallengeInfo')
-		.then(challenge =>
-			{
-				let track = 
-					{
-						name: challenge.Name,
-						uid: challenge.UId,
-						filename: challenge.FileName,
-						author: challenge.Author,
-						mood: challenge.Mood,
-						medals:
-						[
-							challenge.AuthorTime,
-							challenge.GoldTime,
-							challenge.SilverTime,
-							challenge.BronzeTime
-						],
-						coppers: challenge.CopperPrice,
-						isMultilap: challenge.LapRace,
-						laps: challenge.NbLaps,
-						checkpoints: challenge.NbCheckpoints
-					};
-
-				let currentCP = lapnumber * track.checkpoints + number;
-
-				
-			});
-		*/
-
 	}
 	
 	onChallengeEnd (params)
