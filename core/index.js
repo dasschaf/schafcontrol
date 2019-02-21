@@ -271,6 +271,6 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 	app.listen(settings.api.port, () =>
 	{
 		console.log(chalk.green('- Startup -') + ': API server successfully starting and listening at port ' + settings.api.port + '. ('+ process.uptime() +')');
-	})
+	});
 });
 		
