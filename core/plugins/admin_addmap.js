@@ -249,9 +249,9 @@ class plugin
 
 													server.query('ChatSendServerMessage', [message]);
 												});
-										})
-									})
-							})
+										});
+									});
+							});
 					} //-- local --//
 				}
 

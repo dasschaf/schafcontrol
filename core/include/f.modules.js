@@ -18,6 +18,8 @@ module.exports.make = (db, server) =>
 
 		let files = fs.readdirSync(path);
 		
+		let disabled = require('../settings/disabledPlugins.json');
+
 		let rawlist = [];
 		
 		console.log('\n' + chalk.green('- Startup -') + ': Loading Plugins: ('  + process.uptime() + ')\n');
@@ -35,6 +37,13 @@ module.exports.make = (db, server) =>
 		{
 
 			let pg = require(cv);
+
+			if (disabled.includes(pg.name))
+			{
+				pg = {name: pg.name, desc: pg.desc};
+				console.log(chalk.green('- Startup -') + ': PLUGIN ' + chalk.grey('"' + pg.name + '" loaded, but is disabled. (' + process.uptime() + ')'));
+				return pg;
+			}
 			
 			console.log(chalk.green('- Startup -') + ': PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
 

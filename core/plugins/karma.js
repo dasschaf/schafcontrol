@@ -77,7 +77,7 @@ class plugin
 								// fill karma placeholder
 								// send message to server
 								// send private message: vote recorded!
-							})
+							});
 						});
 					}
 
@@ -85,7 +85,7 @@ class plugin
 					{
 						// send private message: already voted dumbass!
 					}
-				})
+				});
 		}
 	}
 	
