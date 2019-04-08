@@ -83,7 +83,7 @@ class plugin
 							.then(result =>
 
 								{
-									console.log('Insertion result: ' + result);
+									//console.log('Insertion result: ' + result);
 
 									db.collection('records').countDocuments({$and: [{track: uid}, {time: {$lt: time}}]})
 									.then(place =>

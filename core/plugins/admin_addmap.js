@@ -238,7 +238,7 @@ class plugin
 
 				if (task === 'writetracklist')
 				{
-					let tracklist = 'tracklist.txt';
+					let tracklist = 'MatchSettings/tracklist.txt';
 
 					server.query('SaveMatchSettings', [tracklist]);
 

@@ -87,7 +87,9 @@ class plugin
 
 		let login = params[0],
 			spec  = params[1],
-			title = 'Player';
+			title = 'Player',
+			server = this.conns['server'],
+			db = this.conns['db'];
 		
 		if (this.settings.masteradmin.login === login)
 			title = this.settings.masteradmin.title;
