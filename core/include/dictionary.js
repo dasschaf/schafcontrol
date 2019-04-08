@@ -20,7 +20,7 @@ module.exports =
 		titlechanged: separators.private + '$z$s$fffYour title was changed to: %title%',
 
 		localrecord_new: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0#%place%$fff local record! ($0ff%time%$fff)',
-		localrecord_imp: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0#%place%$fff local record! ($0ff%time%%fff; $0af%imp%)',
+		localrecord_imp: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0#%place%$fff local record! ($0ff%time%$fff; $0af%imp%$fff)',
 
 		admin_add_tmx: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff just added and jukeboxed $ff0%track%$z$s$fff %method%!',
 		admin_writetracklist: separators.private + '$z$s$fff Tracklist successfully saved.',

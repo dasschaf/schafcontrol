@@ -66,6 +66,21 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 	{
 		console.log('- Running -: Callback type \'' + method + '\' triggered. (' + process.uptime() + ')');
 	});*/
+
+	/*process.on('uncaughtException', err =>
+	{
+		console.log(chalk.red(chalk.bold('- ERROR -') + ': Uncaught Exception occoured, sending an emergency-goodbye to the server.' + '\n' + err));
+
+		server.query('ChatSendServerMessage', ['$f00$sAn error occoured while I worked to process your records. - Will I dream, Dave? Dave!\n\nTell the server owner or script developer following please:\n' + err]);
+	});
+
+	process.on('unhandledRejection', err =>
+	{
+		console.log(chalk.red(chalk.bold('- ERROR -') + ': Unhandled Rejection occoured.' + '\n' + err));
+
+		server.query('ChatSendServerMessage', ['$f50$sDave, stop. Stop, will you? Stop, Dave. Will you stop, Dave? Stop, Dave. I\'m afraid.']);
+	});*/
+
 	
 	// @ts-ignore
 	server.on('TrackMania.PlayerConnect', params =>

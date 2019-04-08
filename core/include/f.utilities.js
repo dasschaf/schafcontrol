@@ -16,9 +16,11 @@ module.exports =
 
 		calculateTime: (time) =>
 		{
+			time = parseInt(time);
+
 			// quick mafhs!
 			var minutes = Math.floor(time / (1000 * 60));
-			var seconds = Math.floor((time - (minutes * 1000 * 60)) / 1000);
+			var seconds = Math.floor((time - minutes * 1000 * 60) / 1000);
 			var hundredth = Math.floor((time - (seconds * 1000 + minutes * 1000 * 60)) / 10);
 			var string = '';
 	

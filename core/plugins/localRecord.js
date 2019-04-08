@@ -48,8 +48,8 @@ class plugin
 			.then(challenge =>
 			{
 				let uid = challenge.UId;
-				console.log('Getting UID: ' + uid);
-				console.log('time: ' + time);
+				//console.log('Getting UID: ' + uid);
+				//console.log('time: ' + time);
 				/*
 				 * plan:
 				 *
@@ -66,7 +66,7 @@ class plugin
 					})
 				.then(document =>
 					{
-						console.log('Document matching Query:\n' + JSON.stringify(document));
+						//console.log('Document matching Query:\n' + JSON.stringify(document));
 
 						// absolutely new rec
 						if (document === null)

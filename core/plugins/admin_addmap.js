@@ -104,26 +104,7 @@ class plugin
 												server.query('GetChallengeInfo', [relative_path])
 												.then(result =>
 													{
-														let challenge = 
-														{
-															name: result.Name,
-															uid: result.UId,
-															filename: result.FileName,
-															author: result.Author,
-															mood: result.Mood,
-															medals:
-															[
-																result.AuthorTime,
-																result.GoldTime,
-																result.SilverTime,
-																result.BronzeTime
-															],
-															coppers: result.CopperPrice,
-															isMultilap: result.LapRace,
-															laps: result.NbLaps,
-															checkpoints: result.NbCheckpoints,
-															source: 'TMX'
-														};
+														let challenge = this.makeChObj(result, 'tmx');
 
 														db.collection('tracks').insertOne(challenge);
 														
@@ -259,7 +240,7 @@ class plugin
 				{
 					let tracklist = 'tracklist.txt';
 
-					server.query('SaveMatchSettings', tracklist);
+					server.query('SaveMatchSettings', [tracklist]);
 
 					server.query('ChatSendServerMessageToLogin', [this.dictionary.admin_writetracklist]);
 				}
