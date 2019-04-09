@@ -15,6 +15,8 @@ class plugin
 		
 		this.dictionary = require('../include/dictionary');
 		this.utilities = require('../include/f.utilities');
+		
+		this.chalk = require('chalk');
 
 		this.requiredConnections = 
 		{
@@ -64,6 +66,8 @@ class plugin
 					});
 				
 				server.query('ChatSendServerMessage', [message]);
+
+				console.log(this.chalk.greenBright('- Running -') + `: ${login} won for the ${nr}th time.`);
 			});
 		
 		

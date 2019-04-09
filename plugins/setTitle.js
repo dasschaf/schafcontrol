@@ -15,6 +15,8 @@ class plugin
 
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
+		
+		this.chalk = require('chalk');
 
 		this.requiredConnections = 
 		{

@@ -18,6 +18,8 @@ class plugin
 		this.name = 'Admin - User handling';
 		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
 
+		this.chalk = require('chalk');
+
 		this.request = require('request');
 		this.fs = require('fs');
 		this.settings = require('../include/settings');
@@ -64,7 +66,7 @@ class plugin
 							results.forEach(document =>
 							{
 								
-							})
+							});
 
 						});
 

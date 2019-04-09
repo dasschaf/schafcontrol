@@ -81,6 +81,26 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		server.query('ChatSendServerMessage', ['$f50$sDave, stop. Stop, will you? Stop, Dave. Will you stop, Dave? Stop, Dave. I\'m afraid.']);
 	});*/
 
+	if (process.platform === "win32") 
+	{
+		var rl = require("readline").createInterface({
+			input: process.stdin,
+			output: process.stdout
+		});
+
+		rl.on("SIGINT", function () {
+			process.emit("SIGINT");
+		});
+	}
+
+	process.on('SIGINT', () =>
+	{
+		// upon Ctrl + C
+
+		server.query('ChatSendServerMessage', ['$f00$sDave, stop. Stop, will you? Stop, Dave. Will you stop, Dave? Stop, Dave. I\'m afraid!']);
+		console.log(chalk.red.bold('SchafControl was terminated via Ctrl + C/SIGINT'));
+
+	});
 	
 	// @ts-ignore
 	server.on('TrackMania.PlayerConnect', params =>

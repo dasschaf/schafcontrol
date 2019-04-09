@@ -18,6 +18,8 @@ class plugin
 		this.settings = require('../include/settings');
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
+		
+		this.chalk = require('chalk');
 
 		//this.isAdmin = require('../include/f.admin').isAdmin;
 
@@ -130,6 +132,7 @@ class plugin
 																	});
 
 																server.query('ChatSendServerMessage', [message]);
+																console.log(this.chalk.greenBright('- Running -') + `: ${login} added ${challenge.name} from TMX to the tracklist`);
 															});
 													});
 											});
@@ -192,6 +195,7 @@ class plugin
 																	});
 
 																server.query('ChatSendServerMessage', [message]);
+																console.log(this.chalk.greenBright('- Running -') + `: ${login} added ${challenge.name} from URL to the tracklist`);
 															});
 													});
 											});
@@ -230,10 +234,11 @@ class plugin
 															title: title,
 															player: nickname,
 															track: challenge.name,
-															method: 'from URL'
+															method: 'from local file'
 														});
 
 													server.query('ChatSendServerMessage', [message]);
+													console.log(this.chalk.greenBright('- Running -') + `: ${login} added ${challenge.name} from local file to the tracklist`);
 												});
 										});
 									});
@@ -248,6 +253,7 @@ class plugin
 					server.query('SaveMatchSettings', [tracklist]);
 
 					server.query('ChatSendServerMessageToLogin', [this.dictionary.admin_writetracklist, login]);
+					console.log(this.chalk.greenBright('- Running -') + `: ${login} saved the tracklist.`);
 				}
 			}
 	}

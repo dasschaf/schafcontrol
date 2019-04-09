@@ -16,6 +16,8 @@ class plugin
 		this.settings = require('../include/settings');
 		this.dictionary = require('../include/dictionary');
 		this.utilities = require('../include/f.utilities');
+		
+		this.chalk = require('chalk');
 
 		this.requiredConnections = 
 		{
@@ -76,6 +78,7 @@ class plugin
 							});
 						
 						server.query('ChatSendServerMessage', [message]);
+						console.log(this.chalk.greenBright('- Running -') + `: ${login} joined the server for the ${nr}th time.`);
 					});
 			});
 	}
@@ -110,6 +113,8 @@ class plugin
 					});
 				
 				server.query('ChatSendServerMessage', [message]);
+
+				console.log(this.chalk.greenBright('- Running -') + `: ${login} left the server.`);
 			});
 		
 	}

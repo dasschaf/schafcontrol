@@ -19,6 +19,8 @@ class plugin
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
 
+		this.chalk = require('chalk');
+
 		this.requiredConnections = 
 		{
 			server: true,		// 1st argument
@@ -70,6 +72,7 @@ class plugin
 
 							server.query("RestartChallenge");
 							server.query('ChatSendServerMessage', [message]);
+							console.log(this.chalk.greenBright('- Running -') + `: ${login} restarted the current track.`);
 						});
 
 					return;
@@ -92,6 +95,7 @@ class plugin
 
 							server.query('NextChallenge');
 							server.query('ChatSendServerMessage', [message]);
+							console.log(this.chalk.greenBright('- Running -') + `: ${login} skipped the current track.`);
 						});
 
 					return;
