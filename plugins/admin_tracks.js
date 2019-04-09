@@ -42,8 +42,6 @@ class plugin
 			login = params[1],
 			server = this.conns['server'],
 			db = this.conns['db'],
-			request = this.request,
-			fs = this.fs,
 			settings = this.settings,
 			utilities = this.utilities;
 
