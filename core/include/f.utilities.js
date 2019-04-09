@@ -26,7 +26,7 @@ module.exports =
 	
 			// 1 + '1' = 11 - 1 = 10!
 	
-			if (seconds < 10) seconds = "0" + seconds;
+			if (seconds < 10 && minutes !== 0) seconds = "0" + seconds;
 			if (hundredth < 10 && hundredth !== 0) hundredth = "0" + hundredth;
 			if (hundredth === 0) hundredth = "00";
 	

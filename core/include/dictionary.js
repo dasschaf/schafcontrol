@@ -19,11 +19,12 @@ module.exports =
 
 		titlechanged: separators.private + '$z$s$fffYour title was changed to: %title%',
 
-		localrecord_new: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0#%place%$fff local record! ($0ff%time%$fff)',
-		localrecord_imp: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0#%place%$fff local record! ($0ff%time%$fff; $0af%imp%$fff)',
+		localrecord_new: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0#%place%$fff local record! ($ff0%time%$fff)',
+		localrecord_imp: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0#%place%$fff local record! ($ff0%time%$fff; $0af%imp%$fff)',
 
 		admin_add_tmx: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff just added and jukeboxed $ff0%track%$z$s$fff %method%!',
 		admin_writetracklist: separators.private + '$z$s$fff Tracklist successfully saved.',
+		admin_restart: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff restarts the current track!',
 
 		karma_status: separators.status + '$z$s$fffKarma on the current track: $ff0%score%$fff (+: $ff0%pos%$fff / -: $ff0%neg%$fff)',
 		karma_recorded: separators.private + '$z$s$fffYour vote has been recorded!',

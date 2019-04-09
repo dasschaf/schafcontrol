@@ -130,6 +130,8 @@ class plugin
 						{
 							// better time
 
+							let imp = document.time - time;
+
 							db.collection('records').findOneAndUpdate(
 								{
 									$and:
@@ -160,7 +162,7 @@ class plugin
 												{
 													let nickname = playerInfo.NickName,
 														_time = utilities.calculateTime(time),
-														improvement = utilities.calculateTime(time - document.time),
+														improvement = '-' + utilities.calculateTime(imp),
 
 														message = utilities.fill(dictionary.localrecord_imp, {nickname: nickname, time: _time, place: place, imp: improvement});
 

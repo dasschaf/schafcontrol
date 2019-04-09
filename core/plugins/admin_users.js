@@ -57,7 +57,7 @@ class plugin
 						let target = command.shift(),
 							message = command.join(' ');
 
-						db.get().collection('players').find({$or: [{login: login}, {login: target}]}, )
+						db.collection('players').find({$or: [{login: login}, {login: target}]}, )
 						
 						break;
 					}
