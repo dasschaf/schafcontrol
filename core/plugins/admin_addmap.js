@@ -19,6 +19,8 @@ class plugin
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
 
+		//this.isAdmin = require('../include/f.admin').isAdmin;
+
 		this.requiredConnections = 
 		{
 			server: true,		// 1st argument
@@ -51,6 +53,9 @@ class plugin
 
 		if (command.shift() === '/admin')
 			{
+				//if (!this.isAdmin(login))
+				//	return;
+
 				let task = command.shift();
 
 				if (task === 'add')
@@ -242,7 +247,7 @@ class plugin
 
 					server.query('SaveMatchSettings', [tracklist]);
 
-					server.query('ChatSendServerMessageToLogin', [this.dictionary.admin_writetracklist]);
+					server.query('ChatSendServerMessageToLogin', [this.dictionary.admin_writetracklist, login]);
 				}
 			}
 	}

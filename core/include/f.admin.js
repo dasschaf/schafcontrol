@@ -2,7 +2,7 @@ let adm_check = (login, db) =>
 {
 
 	let admins = require('../settings/admin.json'),
-		settings = require('')
+		settings = require('./settings')
 
 	if (login === settings.masteradmin.login)
 		return true;
@@ -11,8 +11,10 @@ let adm_check = (login, db) =>
 	{
 		// check for admin perms:
 
-		if (admins.masteramin.includes(login))
+		if (admins.masteradmin.includes(login))
 			return true;
+
+		db.con
 	}	
 
 	
