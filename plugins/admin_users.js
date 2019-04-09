@@ -14,7 +14,7 @@ class plugin
 			server: true,
 			database: true
 		};
-		
+
 		this.name = 'Admin - User handling';
 		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
 
@@ -57,14 +57,23 @@ class plugin
 						let target = command.shift(),
 							message = command.join(' ');
 
-						db.collection('players').find({$or: [{login: login}, {login: target}]}, )
-						
+						db.collection('players').find({$or: [{login: login}, {login: target}]})
+						.then(result =>
+						{
+
+							results.forEach(document =>
+							{
+								
+							})
+
+						});
+
 						break;
 					}
 				}
 			}
 	}
-	
+
 }
 
 module.exports = new plugin();

@@ -29,7 +29,7 @@ server.on('connect', () =>
 	server.query('EnableCallbacks', [true]);
 
 	console.log(chalk.green('- Startup -') + ': Successfully established a connection to the TrackMania server! (' + process.uptime() + ')');
-	server.query('ChatSendServerMessage', ['SchafControl is starting!']);
+	server.query('ChatSendServerMessage', ['$oSchafControl is starting!']);
 });
 
 // 2: database
