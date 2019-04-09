@@ -93,30 +93,24 @@ class plugin
 		
 		if (this.settings.masteradmin.login === login)
 			title = this.settings.masteradmin.title;
+		
+		db.collection('players').findOne(
+			{login: login})
+			.then (document =>
+			{				
+				if (typeof document.title !== 'undefined')
+					title = document.title;
 
-		server.query('GetPlayerInfo', [login, 1])
-		.then(info =>
-		{
-			let nickname = info.NickName;
-			
-			db.collection('players').findOne(
-				{login: login})
-				.then (document =>
-				{
-					let player = document.value;
-					
-					if (typeof document.title !== 'undefined')
-						title = document.title;
-					
-					let message = this.utilities.fill(this.dictionary.leavemessage,
-						{
-							title: title,
-							player: nickname
-						});
-					
-					server.query('ChatSendServerMessage', [message]);
-				});
-		});
+				let nickname = document.nickname;
+				
+				let message = this.utilities.fill(this.dictionary.leavemessage,
+					{
+						title: title,
+						player: nickname
+					});
+				
+				server.query('ChatSendServerMessage', [message]);
+			});
 		
 	}
 }
