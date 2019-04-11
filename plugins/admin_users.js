@@ -87,6 +87,40 @@ class plugin
 
 						break;
 					}
+
+					case 'ban':
+					{
+						let target = command.shift(),
+							message = command.join(' ');
+
+						server.query('GetPlayerInfo', [login, 1])
+						.then(result =>
+							{
+								let adm_nn = result.NickName,
+									adm_lg = login;
+
+								server.query('GetPlayerInfo', [target, 1])
+								.then(result =>
+									{
+										let tar_nn = result.NickName,
+											tar_lg = target;
+
+										db.collection('players').findOne({login: login}).then(document =>
+											{
+												let title = document.title;
+
+												console.log(chalk.greenBright('- Running -') + `: [Admin] - ${adm_lg} ban ${tar_lg}; Reason: ${message}`);
+
+												let s_message = utilities.fill(this.dictionary.admin_ban, {title: title, player: adm_nn, target: tar_nn});
+
+												server.query('ChatSendServerMessage', [s_message]);
+												server.query('Ban', [tar_lg, message]);
+											});
+									});
+							});
+
+						break;
+					}
 				}
 			}
 	}

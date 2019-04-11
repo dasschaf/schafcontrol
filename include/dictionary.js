@@ -25,7 +25,9 @@ module.exports =
 		admin_add_tmx: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff just added and jukeboxed $ff0%track%$z$s$fff %method%!',
 		admin_writetracklist: separators.private + '$z$s$fff Tracklist successfully saved.',
 		admin_restart: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff restarts the current track!',
-		admin_restart: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff skips the current track!',
+		admin_skip: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff skips the current track!',
+		admin_kick: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff skips the current track!',
+		admin_ban: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff skips the current track!',
 
 		karma_status: separators.status + '$z$s$fffKarma on the current track: $ff0%score%$fff (+: $ff0%pos%$fff / -: $ff0%neg%$fff)',
 		karma_recorded: separators.private + '$z$s$fffYour vote has been recorded!',

@@ -1,28 +1,39 @@
-let adm_check = (login, db) =>
+let 
+
+let getTitle = (login) =>
 {
-
-	let admins = require('../settings/admin.json'),
-		settings = require('./settings')
-
-	if (login === settings.masteradmin.login)
-		return true;
-
-	else
-	{
-		// check for admin perms:
-
-		if (admins.masteradmin.includes(login))
-			return true;
-
-		db.con
-	}	
-
-	
-	return false;
-};
+	if (admin.)
+}
 
 module.exports =
 	{
-		check: adm_check
+		admins = require('../settings/admin.json'),
+		settings = require('./settings'),
+
+		check: (login) =>
+		{
+		
+			if (login === this.settings.masteradmin.login)
+				return true;
+		
+			else
+			{
+				// check for admin perms:
+		
+				if (this.admins.masteradmin.includes(login))
+					return true;
+		
+				if (this.admins.admin.includes(login))
+					return true;
+			}	
+		
+			
+			return false;
+		},
+
+		getTitle: (login) =>
+		{
+			
+		}
 	};
 

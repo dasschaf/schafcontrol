@@ -78,7 +78,7 @@ class plugin
 							});
 						
 						server.query('ChatSendServerMessage', [message]);
-						console.log(this.chalk.greenBright('- Running -') + `: ${login} joined the server for the ${nr}th time.`);
+						console.log(this.chalk.greenBright('- Running -') + `: ${login} joined the server for the ${player.joins}th time.`);
 					});
 			});
 	}

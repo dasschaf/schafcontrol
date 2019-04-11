@@ -53,7 +53,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 	*/
 	let plugins = modules.make(db, server);
 	
-	console.log(chalk.green('- Startup -') + ': Plugin list successfully built! (' + process.uptime() + ')\n\n' + chalk.greenBright.bold('- Running -') + ': Listenning now to Callbacks and events. ('+ process.uptime() +')');
+	console.log(chalk.green('- Startup -') + ': Plugin list successfully built! (' + process.uptime() + ')\n' + chalk.green('- Startup -') + ': Script now listening to TM-Server xml-rpc callbacks...');
 	
 	/*
 		* TrackMania Server Callback Handling:
@@ -98,7 +98,9 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 		// upon Ctrl + C
 
 		server.query('ChatSendServerMessage', ['$f00$sDave, stop. Stop, will you? Stop, Dave. Will you stop, Dave? Stop, Dave. I\'m afraid!']);
-		console.log(chalk.red.bold('SchafControl was terminated via Ctrl + C/SIGINT'));
+		console.log(chalk.red.bold('SchafControl was terminated via interruption signal.'));
+
+		process.exit();
 
 	});
 	
@@ -305,7 +307,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 	// 3: API <3
 	app.listen(settings.api.port, () =>
 	{
-		console.log(chalk.green('- Startup -') + ': API server successfully starting and listening at port ' + settings.api.port + '. ('+ process.uptime() +')');
+		console.log(chalk.green('- Startup -') + ': API server successfully starting and listening at port ' + settings.api.port + '. ('+ process.uptime() +')\n');
 	});
 });
 		
