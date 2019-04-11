@@ -213,8 +213,28 @@ class plugin
 		// [3] bool   : Match continues on next map?
 		// [4] bool   : Challenge Restart?
 
+		let challenge = params[1],
+			ranking = params[0];
+
+		db.collection('records').aggregate([
+			{
+				$lookup:
+				{
+					from: 'tracks',
+					local_field: 'login',
+					foreign_field: 'nickname',
+					as: 'player'
+				}
+			}
+		]).sort({time: 1}).toArray((err, res) =>
+		{
+			if (err) throw err;
+			// res is the score result:
+			// {time, player: {nickname, login}}
+			
+		});
 		
-	}
+	}	
 	
 	onChallengeBegin (params)
 	{
@@ -223,6 +243,7 @@ class plugin
 		// [1] bool   : Is WarmUp?
 		// [2] bool   : Is Match Coninuation?
 		
+		let challenge = params[1];
 		
 	}
 	
