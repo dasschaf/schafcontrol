@@ -59,16 +59,31 @@ class plugin
 						let target = command.shift(),
 							message = command.join(' ');
 
-						db.collection('players').find({$or: [{login: login}, {login: target}]})
+						server.query('GetPlayerInfo', [login, 1])
 						.then(result =>
-						{
-
-							results.forEach(document =>
 							{
-								
-							});
+								let adm_nn = result.NickName,
+									adm_lg = login;
 
-						});
+								server.query('GetPlayerInfo', [target, 1])
+								.then(result =>
+									{
+										let tar_nn = result.NickName,
+											tar_lg = target;
+
+										db.collection('players').findOne({login: login}).then(document =>
+											{
+												let title = document.title;
+
+												console.log(chalk.greenBright('- Running -') + `: [Admin] - ${adm_lg} kicked ${tar_lg}; Reason: ${message}`);
+
+												let s_message = utilities.fill(this.dictionary.admin_kick, {title: title, player: adm_nn, target: tar_nn});
+
+												server.query('ChatSendServerMessage', [s_message]);
+												server.query('Kick', [tar_lg, message]);
+											});
+									});
+							});
 
 						break;
 					}
