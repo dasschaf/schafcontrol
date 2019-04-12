@@ -1,14 +1,8 @@
-let 
-
-let getTitle = (login) =>
-{
-	if (admin.)
-}
-
 module.exports =
 	{
-		admins = require('../settings/admin.json'),
-		settings = require('./settings'),
+
+		admins: require('../settings/admin.json'),
+		settings: require('./settings'),
 
 		check: (login) =>
 		{
@@ -33,7 +27,15 @@ module.exports =
 
 		getTitle: (login) =>
 		{
-			
+			if (this.admins.titles.includes(login))
+				return this.admins.titles[login];
+
+			if (this.admins.masteradmin.includes(login))
+				return "Field Marshal"; // maybe add config herefor later
+
+
+			return "Player";
 		}
+
 	};
 

@@ -59,5 +59,5 @@ exports.masteradmin =
 
 exports.api =
 {
-    port: 7886
+    port: 6969
 };
