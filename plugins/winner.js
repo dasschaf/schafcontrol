@@ -67,7 +67,7 @@ class plugin
 				
 				server.query('ChatSendServerMessage', [message]);
 
-				console.log(this.chalk.greenBright('- Running -') + `: ${login} won for the ${nr}th time.`);
+				console.log(this.chalk.greenBright('- Running -') + `: ${login} won for the ${player.wins}th time.`);
 			});
 		
 		

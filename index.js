@@ -97,7 +97,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) =>
 	{
 		// upon Ctrl + C
 
-		server.query('ChatSendServerMessage', ['$f00$sDave, stop. Stop, will you? Stop, Dave. Will you stop, Dave? Stop, Dave. I\'m afraid!']);
+		server.query('ChatSendServerMessage', ['$f00Dave, stop. Stop, will you? Stop, Dave. Will you stop, Dave? Stop, Dave. I\'m afraid!']);
 		console.log(chalk.red.bold('SchafControl was terminated via interruption signal.'));
 
 		process.exit();
