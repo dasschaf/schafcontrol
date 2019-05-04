@@ -81,7 +81,6 @@ class plugin
 
 							db.collection('records').insertOne(record)
 							.then(result =>
-
 								{
 									//console.log('Insertion result: ' + result);
 
@@ -197,7 +196,16 @@ class plugin
 				
 				let obj = this.makeChObj(challenge, 'unknown');
 
-				db.collection('tracks').findOneAndUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
+				db.collection('tracks').countDocuments({uid: obj.uid})
+				.then(number =>
+				{
+					if (number == 0)
+					db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => 
+					{
+						obj.nr = res[0].nr + 1;
+						db.collection('tracks').findOneAndUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
+					});
+				});		
 			});
 		
 		
@@ -216,6 +224,11 @@ class plugin
 		let challenge = params[1],
 			ranking = params[0];
 
+		let db = this.conns['db'],
+			server = this.conns['server'],
+			dictionary = this.dictionary,
+			util = this.utilities;
+
 		db.collection('records').aggregate([
 			{
 				$lookup:
@@ -231,6 +244,20 @@ class plugin
 			if (err) throw err;
 			// res is the score result:
 			// {time, player: {nickname, login}}
+
+			let mesag;
+
+			mesag = util.fill(dictionary.localrecord_summary_a, {map: challenge.Name, event: "after playing"});
+
+			res.forEach((elem, idx) =>
+			{
+				mesag += util.fill(dictionary.localrecord_summary_elem, {name: elem.player.nickname, time: util.calculateTime(elem.time), nr: idx + 1});
+
+				if (idx !== res.length - 1)
+					mesag += ' - ';
+			});
+
+			server.query('ChatSendServerMessage', [mesag]);
 			
 		});
 		

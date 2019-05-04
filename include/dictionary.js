@@ -22,6 +22,9 @@ module.exports =
 		localrecord_new: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0#%place%$fff local record! ($ff0%time%$fff)',
 		localrecord_imp: separators.status + '$z$s$fff%nickname%$z$s$fff just drove the $ff0#%place%$fff local record! ($ff0%time%$fff; $0af%imp%$fff)',
 
+		localrecord_summary_a: separators.status + '$z$s$fffLocal Records on $ff0%map%$z$s$fff %event%: ',
+		localrecord_summary_elem: '$ff0#%nr%: %name%$z$s$fff ($ff0%time%$fff)',
+
 		admin_add_tmx: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff just added and jukeboxed $ff0%track%$z$s$fff %method%!',
 		admin_writetracklist: separators.private + '$z$s$fff Tracklist successfully saved.',
 		admin_restart: separators.status + '$z$s$fff%title%$z$s$ff0 %player%$z$s$fff restarts the current track!',

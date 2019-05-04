@@ -113,7 +113,11 @@ class plugin
 													{
 														let challenge = this.makeChObj(result, 'tmx');
 
-														db.collection('tracks').insertOne(challenge);
+														db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => {
+															challenge.nr = res[0].nr + 1;
+
+															db.collection('tracks').insertOne(challenge);
+														});
 														
 														db.collection('players').findOne({login: login})
 														.then(document =>
@@ -176,7 +180,11 @@ class plugin
 													{
 														let challenge = this.makeChObj(result, 'url');
 
-														db.collection('tracks').insertOne(challenge);
+														db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => {
+															challenge.nr = res[0].nr + 1;
+
+															db.collection('tracks').insertOne(challenge);
+														});
 														
 														db.collection('players').findOne({login: login})
 														.then(document =>
@@ -219,7 +227,11 @@ class plugin
 										{
 											let challenge = this.makeChObj(chinfo);
 
-											db.collection('tracks').insertOne(challenge);
+											db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => {
+															challenge.nr = res[0].nr + 1;
+
+															db.collection('tracks').insertOne(challenge);
+														});
 														
 											db.collection('players').findOne({login: login})
 											.then(document =>
