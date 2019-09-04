@@ -12,5 +12,4 @@ A Node.JS + MongoDB driven TrackMania Forever server controller.
 - free time to victimize
 
 ### bugs? suggestions?
-Submit an Issue on GitLab or just email `incoming+dassschaf/schafcontrol@incoming.gitlab.com` if you don't feel like registering!
-Any help with coding this stuff is greatly appreciated <3
+Submit an issue here on GitHub <3
