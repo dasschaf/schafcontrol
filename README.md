@@ -4,6 +4,7 @@ A Node.JS + MongoDB driven TrackMania Forever server controller.
 ### how to install:
 - npm install
 - change ./include/settings.js according to your setup
+- add collections to the MongoDB database - "players", "records", "tracks"
 - node .
 
 ### requirements:
