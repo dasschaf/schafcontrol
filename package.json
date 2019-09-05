@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "chalk": "^2.4.2",
-    "express": "^4.16.4",
     "gbxremote": "^0.2.1",
     "mongodb": "^3.2.3",
     "mysql": "^2.16.0",
@@ -17,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/dassschaf/schafcontrol.git"
+    "url": "git+https://github.com/dasschaf/schafcontrol.git"
   },
   "keywords": [
     "TrackMania"
@@ -25,7 +24,7 @@
   "author": "dassschaf",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/dassschaf/schafcontrol/issues"
+    "url": "https://github.com/dasschaf/schafcontrol/issues"
   },
-  "homepage": "https://gitlab.com/dassschaf/schafcontrol#README"
+  "homepage": "https://github.com/dasschaf/schafcontrol#schafcontrol"
 }
