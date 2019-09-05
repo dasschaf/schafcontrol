@@ -65,9 +65,10 @@ class plugin
 						nr: player.wins
 					});
 				
-				server.query('ChatSendServerMessage', [message]);
+				if (Number.isInteger(player.wins / 10) || player.wins < 10)
+					server.query('ChatSendServerMessage', [message]);
 
-				console.log(this.chalk.greenBright('- Running -') + `: ${login} won for the ${player.wins}th time.`);
+				console.log(this.chalk.greenBright('- Running -') + `: ${login} won for the ${player.wins}. time.`);
 			});
 		
 		
