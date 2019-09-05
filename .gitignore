@@ -3,3 +3,4 @@
 /package-lock.json
 /ignoreme/**
 /.vs/**
+/include/settings.js
