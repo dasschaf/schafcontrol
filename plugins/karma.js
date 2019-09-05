@@ -25,7 +25,9 @@ class plugin
         };
         
         this.settings = require('../include/settings');
-        this.karma = require('../settings/karma.json');
+		this.karma = require('../settings/karma.json');
+		this.dictionary = require('../include/dictionary')
+		this.utilities = require('../include/f.utilities')
 	}
 
 	onChat (params)
@@ -77,6 +79,12 @@ class plugin
 								// fill karma placeholder
 								// send message to server
 								// send private message: vote recorded!
+
+								this.conns['server'].query('ChatSendServerMessageToLogin', [this.dictionary.karma_recorded, login]);
+
+								let karmaString = this.utilities.fill(this.dictionary.karma_status, {score: score, pos: pos, neg: neg});
+
+								this.conns['server'].query('ChatSendServerMessage', [karmaString]);
 							});
 						});
 					}
@@ -84,6 +92,8 @@ class plugin
 					else
 					{
 						// send private message: already voted dumbass!
+
+						this.conns['server'].query('ChatSendServerMessageToLogin', [this.dictionary.karma_alreadyvoted, login]);
 					}
 				});
 		}
