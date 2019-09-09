@@ -196,15 +196,20 @@ class plugin
 				
 				let obj = this.makeChObj(challenge, 'unknown');
 
-				db.collection('tracks').countDocuments({uid: obj.uid})
-				.then(number =>
+				db.collection('tracks').find({uid: obj.uid})
+				.then(results =>
 				{
-					if (number == 0)
-					db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => 
-					{
-						obj.nr = res[0].nr + 1;
-						db.collection('tracks').findOneAndUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
-					});
+					if (results.toArray().length == 0)
+						db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => 
+						{
+							obj.nr = res[0].nr + 1;
+							db.collection('tracks').findOneAndUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
+						});
+
+					if (results.toArray().length == 1)
+						if (results.toArray()[0].nrLaps == -1)
+							db.collection('tracks').findOneAndUpdate({uid: uid}, {$set: obj});
+
 				});		
 			});
 		
