@@ -14,7 +14,7 @@ module.exports =
 			{
 				// check for admin perms:
 		
-				if (this.admins.masteradmin.includes(login))
+				if (this.settings.masteradmin.includes(login))
 					return true;
 		
 				if (this.admins.admin.includes(login))
@@ -31,7 +31,7 @@ module.exports =
 				return this.admins.titles[login];
 
 			if (this.admins.masteradmin.includes(login))
-				return "Field Marshal"; // maybe add config herefor later
+				return this.settings.masteradmin.title;
 
 
 			return "Player";
