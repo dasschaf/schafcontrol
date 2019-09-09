@@ -255,25 +255,35 @@ class plugin
 
 					if (mode === 'local')
 					{
+						// get tracks directory to get said challenge
 						server.query('GetTracksDirectory')
 						.then(directory =>
 							{
+								// assemble path from gotten directory + argument
 								let path = directory + file;
 
+								// add track to tracklsit
 								server.query('InsertChallenge', [path])
 								.then(result =>
 									{
+
+										// get challenge metadata
 										server.query('GetChallengeInfo', [path],
 										chinfo =>
 										{
-											let challenge = this.makeChObj(chinfo);
+											// make challenge MongoDB document
+											let challenge = this.makeChObj(chinfo, 'local');
 
+											// get the track ID of the last track added to the database
 											db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => {
+															// add 1 to the ID to get the ID for this track
 															challenge.nr = res[0].nr + 1;
 
+															// add track to the collection
 															db.collection('tracks').insertOne(challenge);
 														});
 														
+											// get player document for nickname / title to format the message
 											db.collection('players').findOne({login: login})
 											.then(document =>
 												{
@@ -282,6 +292,7 @@ class plugin
 													let title = player.title,
 														nickname = player.nickname;
 
+													// fill in message template
 													let message = utilities.fill(this.dictionary.admin_add_tmx,
 														{
 															title: title,
@@ -289,7 +300,8 @@ class plugin
 															track: challenge.name,
 															method: 'from local file'
 														});
-
+													
+													// send message to the server & log
 													server.query('ChatSendServerMessage', [message]);
 													console.log(this.chalk.greenBright('- Running -') + `: ${login} added ${challenge.name} from local file to the tracklist`);
 												});
@@ -301,10 +313,13 @@ class plugin
 
 				if (task === 'writetracklist')
 				{
+					// default tracklist path - to be used with arguments later!
 					let tracklist = 'MatchSettings/tracklist.txt';
 
+					// save tracklist to said path
 					server.query('SaveMatchSettings', [tracklist]);
 
+					// message to admin executing command + logging
 					server.query('ChatSendServerMessageToLogin', [this.dictionary.admin_writetracklist, login]);
 					console.log(this.chalk.greenBright('- Running -') + `: ${login} saved the tracklist.`);
 				}
@@ -313,13 +328,29 @@ class plugin
 
 	makeChObj (challenge, source)
 	{
+		// make challenge document
 		let obj =
 		{
+			// track's name, including formatting
 			name: challenge.Name,
+
+			// track's uniquer ID
 			uid: challenge.UId,
+
+			// filename of the track (with path based from [server]/GameData/Tracks)
 			filename: challenge.FileName,
+
+			// track's author's login
 			author: challenge.Author,
+
+			// track's mood/daytime
 			mood: challenge.Mood,
+
+			// track's medals - time in milliseconds, stunt score in pts
+			// [0] -> author time
+			// [1] -> gold time
+			// [2] -> silver time
+			// [3] -> bronze time
 			medals:
 			[
 				challenge.AuthorTime,
@@ -327,10 +358,20 @@ class plugin
 				challenge.SilverTime,
 				challenge.BronzeTime
 			],
+
+			// track's copper weight
 			coppers: challenge.CopperPrice,
+
+			// is the track a multilap race?
 			isMultilap: challenge.LapRace,
+
+			// lap number - unfortunately -1 when inserted from /admin add
 			laps: challenge.NbLaps,
+
+			// CP number - unfortunately -1 when inserted from /admin add
 			checkpoints: challenge.NbCheckpoints,
+
+			// track's source - added locally, per URL, from TMX or unknown source
 			source: source
 		};
 
