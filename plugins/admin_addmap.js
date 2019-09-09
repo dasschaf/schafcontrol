@@ -18,6 +18,7 @@ class plugin
 		this.settings = require('../include/settings');
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
+		this.admin = require('../include/f.admin')
 		
 		this.chalk = require('chalk');
 
@@ -55,8 +56,13 @@ class plugin
 
 		if (command.shift() === '/admin')
 			{
-				//if (!this.isAdmin(login))
-				//	return;
+				let title;
+
+				if (!this.admin.check(login))
+					return;
+
+				else
+					title = this.admin.getTitle(login)
 
 				let task = command.shift();
 
@@ -68,6 +74,8 @@ class plugin
 
 					if (mode === 'tmx')
 					{
+						// default: united site
+						// ... selected when last parameter is omitted
 						let id = file,
 							site = 'united';
 
@@ -83,15 +91,20 @@ class plugin
 						else if (para === 'tms')
 							site = 'sunrise';
 
+						// assemble link:
 						let link = 'https://' + site + '.tm-exchange.com/get.aspx?action=trackgbx&id=' + id;
 
+						// URL request to the specified united site for said track:
 						request({url: link, encoding: 'binary'}, (error, response, body) =>
 							{
 								// if error: throw error.
 								if (error) throw error;
 								
+								// wait for response to successfully finish
 								if (response && response.statusCode === 200)
 								{
+
+									// get tracks directory from the server to write the downloaded track into the fitting directory
 									server.query('GetTracksDirectory').then(result =>
 									{
 										// get variables right
@@ -105,28 +118,42 @@ class plugin
 										// write file.
 										fs.writeFileSync(absolute_path, body, 'binary');
 
+										// insert track to the tracklist
 										server.query('InsertChallenge', [relative_path])
 										.then(result =>
 											{
+
+												// get the metadata of the track from the server in order to add the track to the database
 												server.query('GetChallengeInfo', [relative_path])
 												.then(result =>
 													{
+														// convert ChallengeInfo object of the server into a object with proper formatting
 														let challenge = this.makeChObj(result, 'tmx');
-
+														
+														// add track to database with track ID
+														// query:
+														//	- get all tracks
+														//  - sort descending by MongoDB UID, the newest object will be first
+														//  - only get one document and add it to an array (?!)
 														db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => {
+															// add track ID to the object
 															challenge.nr = res[0].nr + 1;
-
+															
+															// insert to database
 															db.collection('tracks').insertOne(challenge);
 														});
 														
+														// get player information from database
 														db.collection('players').findOne({login: login})
 														.then(document =>
 															{
 																let player = document;
 
+																// get nickname and title to format the message
 																let title = this.settings.masteradmin.login === login ? this.settings.masteradmin.title : player.title;
 																let nickname = player.nickname;
 
+																// fill in message placeholders
 																let message = utilities.fill(this.dictionary.admin_add_tmx,
 																	{
 																		title: title,
@@ -135,6 +162,7 @@ class plugin
 																		method: 'from TMX'
 																	});
 
+																// send message, logging
 																server.query('ChatSendServerMessage', [message]);
 																console.log(this.chalk.greenBright('- Running -') + `: ${login} added ${challenge.name} from TMX to the tracklist`);
 															});
@@ -147,15 +175,20 @@ class plugin
 
 					if (mode === 'url')
 					{
+						// get link from the passed argument
 						let link = file;
 
+						// send HTTP request to download the file
 						request({url: link, encoding: 'binary'}, (error, response, body) =>
 							{
 								// if error: throw error.
 								if (error) throw error;
 								
+								// once file downloaded & everything OK:
 								if (response && response.statusCode === 200)
 								{
+
+									// get tracks directory from the server to put the track into it
 									server.query('GetTracksDirectory').then(result =>
 									{
 										let spliturl = link.split('/');
@@ -172,20 +205,27 @@ class plugin
 										// write file.
 										fs.writeFileSync(absolute_path, body, 'binary');
 
+										// add track to tracklist
 										server.query('InsertChallenge', [relative_path])
 										.then(result =>
 											{
+												// get challenge info for metadata
 												server.query('GetChallengeInfo', [relative_path])
 												.then(result =>
 													{
+
+														// create MongoDB document
 														let challenge = this.makeChObj(result, 'url');
 
+														// get the new ID for the track, get latest document and get the number from it, add one for the new ID
 														db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => {
 															challenge.nr = res[0].nr + 1;
 
+															// add track to database
 															db.collection('tracks').insertOne(challenge);
 														});
 														
+														// get player nickname and title to format chat message
 														db.collection('players').findOne({login: login})
 														.then(document =>
 															{
@@ -201,7 +241,8 @@ class plugin
 																		track: challenge.name,
 																		method: 'from URL'
 																	});
-
+																
+																// send chat message & logging
 																server.query('ChatSendServerMessage', [message]);
 																console.log(this.chalk.greenBright('- Running -') + `: ${login} added ${challenge.name} from URL to the tracklist`);
 															});
