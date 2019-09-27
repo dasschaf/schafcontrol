@@ -21,7 +21,7 @@ class plugin
 
 		this.requiredConnections = 
 		{
-			server: true,		// 1st argument
+			server: true,		
 			database: true
 		};
 	}
@@ -41,9 +41,14 @@ class plugin
 			dictionary = this.dictionary,
 			chalk = this.chalk;
 
+
+		// game occasionally fires a finish event with time == 0, most likely due to restarting the race
+		// don't treat this as a valid local record.
 		if (time === 0)
 			return;
-		
+
+
+		// get current challenge info for DB queries
 		server.query('GetCurrentChallengeInfo', [])
 			.then(challenge =>
 			{
@@ -84,22 +89,26 @@ class plugin
 								{
 									//console.log('Insertion result: ' + result);
 
+									// count the documents with a lower time to get the record's place
 									db.collection('records').countDocuments({$and: [{track: uid}, {time: {$lt: time}}]})
 									.then(place =>
 										{
 											
+											// logically #place must be += 1 
 											place = place + 1;
 
+											// get player info for the chat message
 											server.query('GetPlayerInfo', [login, 1])
 											.then(playerInfo =>
 												{
+													// formatting everything
 													let nickname = playerInfo.NickName,
 														_time = utilities.calculateTime(time),
 
 														message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: _time, place: place});
 
+													// send message + logging
 													server.query('ChatSendServerMessage', message);
-
 													console.log(chalk.greenBright('- Running -') + `: [Local Records] - New Local Record (#${place}) by ${login} on ${challenge.Name}; (${time} ms)`);
 												})
 
@@ -121,6 +130,7 @@ class plugin
 								});
 						}
 
+						// no improvement in time
 						if (document.time <= time)
 							return; //abort!
 						
