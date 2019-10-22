@@ -11,54 +11,54 @@ let chalk = require('chalk');
 let settings = require('./settings');
 
 
-module.exports.make = (db, server) =>
-	{
+module.exports.make = (db, server) => {
 
-		const path = __dirname + '/..\\plugins\\';
+	const path = __dirname + '/..\\plugins\\';
 
-		let files = fs.readdirSync(path);
-		
-		let disabled = require('../settings/disabledPlugins.json');
+	let files = fs.readdirSync(path);
 
-		let rawlist = [];
-		
-		console.log('\n' + chalk.green('- Startup -') + ': Loading Plugins: ('  + process.uptime() + ')\n');
-		
-		files.forEach(file =>
-		{
-			if(file.endsWith('.js'))
-				rawlist.push(path + file);
-			
-			else
-				console.log('- WARNING -: Invalid plugin file in ./plugins/: ' + file + ' (' + process.uptime() + ')');
-		});
+	let disabled = require('../settings/disabledPlugins.json');
 
-		let list = rawlist.map(cv =>
-		{
+	let rawlist = [];
 
-			let pg = require(cv);
+	console.log('\n' + chalk.green('- Startup -') + ': Loading Plugins: (' + process.uptime() + ')\n');
 
-			if (disabled.includes(pg.name))
-			{
-				pg = {name: pg.name, desc: pg.desc};
-				console.log(chalk.green('- Startup -') + ': PLUGIN ' + chalk.grey('"' + pg.name + '" loaded, but is disabled. (' + process.uptime() + ')'));
-				return pg;
-			}
-			
-			console.log(chalk.green('- Startup -') + ': PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
+	files.forEach(file => {
+		if (file.endsWith('.js'))
+			rawlist.push(path + file);
 
-			pg.conns = {};
-			
-			//if ('server' in pg.requiredConnections)
-				pg.conns.server = server;
+		else
+			console.log('- WARNING -: Invalid plugin file in ./plugins/: ' + file + ' (' + process.uptime() + ')');
+	});
 
-			//if ('database' in pg.requiredConnections)
-				pg.conns.db = db;
+	let list = rawlist.map(cv => {
 
+		let pg = require(cv);
+
+		if (disabled.includes(pg.name)) {
+			pg = { name: pg.name, desc: pg.desc };
+			console.log(chalk.green('- Startup -') + ': PLUGIN ' + chalk.grey('"' + pg.name + '" loaded, but is disabled. (' + process.uptime() + ')'));
 			return pg;
-		});
-		
-		console.log('\n' + chalk.green('- Startup -') + ': Plugins loaded! ('  + process.uptime() + ')');
-		
-		return list;
-	};
+		}
+
+		// todo - look if gamemode is incompatible with plugin's required game mode:
+		//
+		// if (pg.stunt_mode === settings.server.stunt_mode) ...
+
+		console.log(chalk.green('- Startup -') + ': PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
+
+		pg.conns = {};
+
+		//if ('server' in pg.requiredConnections)
+		pg.conns.server = server;
+
+		//if ('database' in pg.requiredConnections)
+		pg.conns.db = db;
+
+		return pg;
+	});
+
+	console.log('\n' + chalk.green('- Startup -') + ': Plugins loaded! (' + process.uptime() + ')');
+
+	return list;
+};

@@ -16,13 +16,13 @@ exports.mongodb =
         // options:
         // MongoDB options object - change only if you know what you're doing!
         options:
-            {
-                // connection pool size for the reusable connection object:
-                poolSize: 10,
+        {
+            // connection pool size for the reusable connection object:
+            poolSize: 10,
 
-                // URL parser setting - always have to be true!
-                useNewUrlParser: true
-            },
+            // URL parser setting - always have to be true!
+            useNewUrlParser: true
+        },
 
         // database:
         // the name of your database, set this to the name of the database you created on the MongoDB instance you use
@@ -57,7 +57,13 @@ exports.server =
         // masterserver_login:
         // The login of your server, which it is registered to at the Master server of TMF.
         // The login is set in the server's dedicated_cfg.txt as well as on the TMF player page.
-        masterserver_login: ' l o g i n '
+        masterserver_login: ' l o g i n ',
+
+        // stunt_mode:
+        // Whether the server runs in Stunt mode or not, important regarding how the
+        // Local Records are dealt with - if it's a stunt mode server the scores will be treated
+        // as actual numbers and not as time in milliseconds
+        stunt_mode: false
     };
 
 exports.masteradmin =
@@ -65,7 +71,7 @@ exports.masteradmin =
         // masteradmin login:
         // The login of the player that is supposed to have control over everything in the script later, ideally set this to be your own login.
         login: '',
-        
+
         // masteradmin title:
         // your future personal title! Supports all kinds of TM formatting for colours and text stuff.
         title: ''
