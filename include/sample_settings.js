@@ -58,7 +58,13 @@ exports.server =
         // masterserver_login:
         // The login of your server, which it is registered to at the Master server of TMF.
         // The login is set in the server's dedicated_cfg.txt as well as on the TMF player page.
-        masterserver_login: ' l o g i n '
+        masterserver_login: ' l o g i n ',
+
+        // stunt_mode:
+        // Whether the server runs in Stunt mode or not, important regarding how the
+        // Local Records are dealt with - if it's a stunt mode server the scores will be treated
+        // as actual numbers and not as time in milliseconds
+        stunt_mode: false
     };
 
 exports.masteradmin =

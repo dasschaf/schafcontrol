@@ -41,6 +41,10 @@ module.exports.make = (db, server) => {
 			return pg;
 		}
 
+		// todo - look if gamemode is incompatible with plugin's required game mode:
+		//
+		// if (pg.stunt_mode === settings.server.stunt_mode) ...
+
 		console.log(chalk.green('- Startup -') + ': PLUGIN "' + pg.name + '" loaded. (' + process.uptime() + ')');
 
 		pg.conns = {};

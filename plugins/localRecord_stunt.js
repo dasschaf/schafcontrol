@@ -1,7 +1,7 @@
 
 //
 // SchafControl localRecords plugin
-// - race -
+// - stunts -
 //
 // localRecord handling
 //
@@ -24,8 +24,7 @@ class plugin {
 				database: true
 			};
 
-		this.stunt_mode = false;
-
+		this.stunt_mode = true;
 	}
 
 	onFinish(params) {
