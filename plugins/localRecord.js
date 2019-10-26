@@ -5,34 +5,31 @@
 // localRecord handling
 //
 
-class plugin
-{
-	constructor()
-	{
-		
+class plugin {
+	constructor() {
+
 		this.name = 'LocalRecords';
 		this.desc = 'Local Records management plugin';
-		
+
 		this.settings = require('../include/settings');
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
 
 		this.chalk = require('chalk');
 
-		this.requiredConnections = 
-		{
-			server: true,		
-			database: true
-		};
+		this.requiredConnections =
+			{
+				server: true,
+				database: true
+			};
 	}
-	
-	onFinish (params)
-	{
+
+	onFinish(params) {
 		// params:
 		// [0] int    : Player UId
 		// [1] string : login
 		// [2] int    : Time/Score
-		
+
 		let time = params[2],
 			login = params[1],
 			utilities = this.utilities,
@@ -50,8 +47,7 @@ class plugin
 
 		// get current challenge info for DB queries
 		server.query('GetCurrentChallengeInfo', [])
-			.then(challenge =>
-			{
+			.then(challenge => {
 				let uid = challenge.UId;
 				//console.log('Getting UID: ' + uid);
 				//console.log('time: ' + time);
@@ -62,20 +58,18 @@ class plugin
 				 * 2) calculate rank and update rank in record
 				 * 3) post message
 				 */
-	
+
 				db.collection('records').findOne(
 					{
 						$and:
-						[	{track: uid}, 
-							{login: login}	]
+							[{ track: uid },
+							{ login: login }]
 					})
-				.then(document =>
-					{
+					.then(document => {
 						//console.log('Document matching Query:\n' + JSON.stringify(document));
 
 						// absolutely new rec
-						if (document === null)
-						{
+						if (document === null) {
 							// create new record:
 							let record =
 							{
@@ -85,47 +79,41 @@ class plugin
 							};
 
 							db.collection('records').insertOne(record)
-							.then(result =>
-								{
+								.then(result => {
 									//console.log('Insertion result: ' + result);
 
 									// count the documents with a lower time to get the record's place
-									db.collection('records').countDocuments({$and: [{track: uid}, {time: {$lt: time}}]})
-									.then(place =>
-										{
-											
+									db.collection('records').countDocuments({ $and: [{ track: uid }, { time: { $lt: time } }] })
+										.then(place => {
+
 											// logically #place must be += 1 
 											place = place + 1;
 
 											// get player info for the chat message
 											server.query('GetPlayerInfo', [login, 1])
-											.then(playerInfo =>
-												{
+												.then(playerInfo => {
 													// formatting everything
 													let nickname = playerInfo.NickName,
 														_time = utilities.calculateTime(time),
 
-														message = utilities.fill(dictionary.localrecord_new, {nickname: nickname, time: _time, place: place});
+														message = utilities.fill(dictionary.localrecord_new, { nickname: nickname, time: _time, place: place });
 
 													// send message + logging
 													server.query('ChatSendServerMessage', message);
 													console.log(chalk.greenBright('- Running -') + `: [Local Records] - New Local Record (#${place}) by ${login} on ${challenge.Name}; (${time} ms)`);
 												})
 
-											.catch(error =>
-												{
+												.catch(error => {
 													console.log(chalk.red('- SERVER ERROR -') + ': ' + error);
-												});												
+												});
 										})
 
-									.catch(error =>
-										{
+										.catch(error => {
 											console.log(chalk.red('- DB ERROR -') + ': ' + error);
 										});
 								})
-							
-							.catch(error =>
-								{
+
+								.catch(error => {
 									console.log(chalk.red('- DB ERROR -') + ': ' + error);
 								});
 						}
@@ -133,10 +121,9 @@ class plugin
 						// no improvement in time
 						if (document.time <= time)
 							return; //abort!
-						
+
 						// better rec
-						if (document.time > time)
-						{
+						if (document.time > time) {
 							// better time
 
 							let imp = document.time - time;
@@ -144,12 +131,12 @@ class plugin
 							db.collection('records').findOneAndUpdate(
 								{
 									$and:
-									[	{track: uid},
-										{login: login}	]
+										[{ track: uid },
+										{ login: login }]
 								},
 
 								{
-									$set: {time: time}
+									$set: { time: time }
 								},
 
 								{
@@ -157,78 +144,68 @@ class plugin
 								}
 							)
 
-							.then(document =>
-								{
+								.then(document => {
 
-									db.collection('records').countDocuments({$and: [{track: uid}, {time: {$lt: time}}]})
-									.then(place =>
-										{
+									db.collection('records').countDocuments({ $and: [{ track: uid }, { time: { $lt: time } }] })
+										.then(place => {
 
 											place = place + 1;
 
 											server.query('GetPlayerInfo', [login, 1])
-											.then(playerInfo =>
-												{
+												.then(playerInfo => {
 													let nickname = playerInfo.NickName,
 														_time = utilities.calculateTime(time),
 														improvement = '-' + utilities.calculateTime(imp),
 
-														message = utilities.fill(dictionary.localrecord_imp, {nickname: nickname, time: _time, place: place, imp: improvement});
+														message = utilities.fill(dictionary.localrecord_imp, { nickname: nickname, time: _time, place: place, imp: improvement });
 
 													server.query('ChatSendServerMessage', message);
 
 													console.log(chalk.greenBright('- Running -') + `: [Local Records] - New Local Record (#${place}) by ${login} on ${challenge.Name}; (${time} ms)`);
 												})
 
-											.catch(error =>
-												{
+												.catch(error => {
 													console.log(chalk.red('- SERVER ERROR -') + ': ' + error);
-												});												
+												});
 										})
 
-									.catch(error =>
-										{
+										.catch(error => {
 											console.log(chalk.red('- DB ERROR -') + ': ' + error);
 										});
 								})
-							
-							.catch(error =>
-								{
+
+								.catch(error => {
 									console.log(chalk.red('- DB ERROR -') + ': ' + error);
 								});
 
 						}
 					})
-					.catch(error =>
-					{
+					.catch(error => {
 						console.log(chalk.red('- DB ERROR -') + ': ' + error);
 					});
-				
+
 				let obj = this.makeChObj(challenge, 'unknown');
 
-				db.collection('tracks').find({uid: obj.uid})
-				.then(results =>
-				{
-					if (results.toArray().length == 0)
-						db.collection('tracks').find({}).sort({_id: -1}).limit(1).toArray((err, res) => 
-						{
-							obj.nr = res[0].nr + 1;
-							db.collection('tracks').findOneAndUpdate({uid: uid},{$setOnInsert: obj}, {upsert: true});
-						});
+				db.collection('tracks').find({ uid: obj.uid })
+					.then(results => {
+						if (results.toArray().length == 0)
+							db.collection('tracks').find({}).sort({ _id: -1 }).limit(1).toArray((err, res) => {
+								obj.nr = res[0].nr + 1;
+								db.collection('tracks').findOneAndUpdate({ uid: uid }, { $setOnInsert: obj }, { upsert: true });
+							});
 
-					if (results.toArray().length == 1)
-						if (results.toArray()[0].nrLaps == -1)
-							db.collection('tracks').findOneAndUpdate({uid: uid}, {$set: obj});
+						if (results.toArray().length == 1)
+							if (results.toArray()[0].nrLaps == -1)
+								db.collection('tracks').findOneAndUpdate({ uid: uid }, { $set: obj });
 
-				});		
+					});
 			});
-		
-		
-		
+
+
+
 	}
-	
-	onChallengeEnd (params)
-	{
+
+	onChallengeEnd(params) {
 		// params:
 		// [0] struct : PlayerRankings (SPlayerRankings[])
 		// [1] struct : ChallengeInfo  (SChallengeInfo)
@@ -254,43 +231,40 @@ class plugin
 					as: 'player'
 				}
 			}
-		]).sort({time: 1}).toArray((err, res) =>
-		{
+		]).sort({ time: 1 }).toArray((err, res) => {
 			if (err) throw err;
 			// res is the score result:
 			// {time, player: {nickname, login}}
 
 			let mesag;
 
-			mesag = util.fill(dictionary.localrecord_summary_a, {map: challenge.Name, event: "after playing"});
+			// format message
+			mesag = util.fill(dictionary.localrecord_summary_a, { map: challenge.Name, event: "after playing" });
 
-			res.forEach((elem, idx) =>
-			{
-				mesag += util.fill(dictionary.localrecord_summary_elem, {name: elem.player.nickname, time: util.calculateTime(elem.time), nr: idx + 1});
+			res.forEach((elem, idx) => {
+				mesag += util.fill(dictionary.localrecord_summary_elem, { name: elem.player.nickname, time: util.calculateTime(elem.time), nr: idx + 1 });
 
 				if (idx !== res.length - 1)
 					mesag += ' - ';
 			});
 
 			server.query('ChatSendServerMessage', [mesag]);
-			
+
 		});
-		
-	}	
-	
-	onChallengeBegin (params)
-	{
+
+	}
+
+	onChallengeBegin(params) {
 		// params:
 		// [0] struct : ChallengeInfo (SChallengeInfo)
 		// [1] bool   : Is WarmUp?
 		// [2] bool   : Is Match Coninuation?
-		
+
 		let challenge = params[1];
-		
+
 	}
-	
-	makeChObj (challenge, source)
-	{
+
+	makeChObj(challenge, source) {
 		let obj =
 		{
 			name: challenge.Name,
@@ -299,12 +273,12 @@ class plugin
 			author: challenge.Author,
 			mood: challenge.Mood,
 			medals:
-			[
-				challenge.AuthorTime,
-				challenge.GoldTime,
-				challenge.SilverTime,
-				challenge.BronzeTime
-			],
+				[
+					challenge.AuthorTime,
+					challenge.GoldTime,
+					challenge.SilverTime,
+					challenge.BronzeTime
+				],
 			coppers: challenge.CopperPrice,
 			isMultilap: challenge.LapRace,
 			laps: challenge.NbLaps,

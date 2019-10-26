@@ -5,26 +5,24 @@
 // it actually doesn't do anything...
 //
 
-class plugin
-{
-	constructor()
-	{
-		
+class plugin {
+	constructor() {
+
 		this.name = 'Set - Title';
 		this.desc = 'Set library provides a variety of functions to set settings for yourself - this particular module provides support to set your custom title';
 
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
-		
+
 		this.chalk = require('chalk');
 
-		this.requiredConnections = 
-		{
-			server: true,		// 1st argument
-			database: true
-		};
+		this.requiredConnections =
+			{
+				server: true,		// 1st argument
+				database: true
+			};
 	}
-	
+
 	/*
 	onChat (params)
 	{

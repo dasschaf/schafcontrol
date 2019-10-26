@@ -6,6 +6,7 @@
 
 exports.mongodb =
     {
+
         // MongoDB settings
         //
         // url:
@@ -16,13 +17,13 @@ exports.mongodb =
         // options:
         // MongoDB options object - change only if you know what you're doing!
         options:
-            {
-                // connection pool size for the reusable connection object:
-                poolSize: 10,
+        {
+            // connection pool size for the reusable connection object:
+            poolSize: 10,
 
-                // URL parser setting - always have to be true!
-                useNewUrlParser: true
-            },
+            // URL parser setting - always have to be true!
+            useNewUrlParser: true
+        },
 
         // database:
         // the name of your database, set this to the name of the database you created on the MongoDB instance you use
@@ -65,7 +66,7 @@ exports.masteradmin =
         // masteradmin login:
         // The login of the player that is supposed to have control over everything in the script later, ideally set this to be your own login.
         login: '',
-        
+
         // masteradmin title:
         // your future personal title! Supports all kinds of TM formatting for colours and text stuff.
         title: ''

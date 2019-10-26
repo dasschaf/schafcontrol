@@ -1,16 +1,11 @@
 {
-    "noDownvote": 
-    [
+    "noDownvote": [
         "papa_tojo"
     ],
-
-    "noUpvote":
-    [
+    "noUpvote": [
         "mariefacetoface"
     ],
-
     "threshold_medium": 0.44,
     "threshold_good": 0.65,
-
     "enable_messages": true
 }

@@ -4,18 +4,15 @@
 
 module.exports =
 	{
-		fill: (string, replacements) =>
-		{
-			Object.keys(replacements).forEach((element, idx) =>
-			{
+		fill: (string, replacements) => {
+			Object.keys(replacements).forEach((element, idx) => {
 				string = string.replace('%' + Object.keys(replacements)[idx] + '%', replacements[element]);
 			});
 
 			return string;
 		},
 
-		calculateTime: (time) =>
-		{
+		calculateTime: (time) => {
 			time = parseInt(time);
 
 			// quick mafhs!
@@ -23,21 +20,20 @@ module.exports =
 			var seconds = Math.floor((time - minutes * 1000 * 60) / 1000);
 			var hundredth = Math.floor((time - (seconds * 1000 + minutes * 1000 * 60)) / 10);
 			var string = '';
-	
+
 			// 1 + '1' = 11 - 1 = 10!
-	
+
 			if (seconds < 10 && minutes !== 0) seconds = "0" + seconds;
 			if (hundredth < 10 && hundredth !== 0) hundredth = "0" + hundredth;
 			if (hundredth === 0) hundredth = "00";
-	
+
 			if (minutes === 0) string = seconds + '.' + hundredth;
 			if (minutes !== 0) string = minutes + ':' + seconds + '.' + hundredth;
-	
+
 			return string;
 		},
 
-		formatting_tm2html: (string) =>
-		{
+		formatting_tm2html: (string) => {
 
 			// strip formatting
 			string = string.replace(/[$][nmwoszi]|[$][hl][\[][a-zA-Z0-9/?#!&\.\\\-_=@$'()+,;:]*[\]]/gi, '');
@@ -57,15 +53,13 @@ module.exports =
 			} else return string;
 		},
 
-		formatting_strip_tm: (string) =>
-		{
+		formatting_strip_tm: (string) => {
 
 			return string.replace(/[$][nmwoszi]|[$][hl][\[][a-zA-Z0-9/?#!&\.\\\-_=@$'()+,;:]*[\]]|[$]{1}[0-f]{3}/gi, '');
 
 		},
 
-		th: (number) =>
-		{
+		th: (number) => {
 			while (number > 20) {
 				number = number - 10;
 			}

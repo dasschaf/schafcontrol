@@ -4,10 +4,10 @@
 //
 
 let separators =
-	{
-		status: '$0af-- ',
-		private: '$999-- '
-	};
+{
+	status: '$0af-- ',
+	private: '$999-- '
+};
 
 module.exports =
 	{

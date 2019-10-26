@@ -5,10 +5,8 @@
 // it actually doesn't do anything...
 //
 
-class plugin
-{
-	constructor()
-	{		
+class plugin {
+	constructor() {
 
 		this.name = 'Admin - Track handling';
 		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
@@ -21,16 +19,15 @@ class plugin
 
 		this.chalk = require('chalk');
 
-		this.requiredConnections = 
-		{
-			server: true,		// 1st argument
-			database: true
-		};
+		this.requiredConnections =
+			{
+				server: true,		// 1st argument
+				database: true
+			};
 
 	}
-	
-	onChat (params)
-	{
+
+	onChat(params) {
 		// params:
 		// [0] int   : player UId
 		// [1] string: login
@@ -48,17 +45,14 @@ class plugin
 			utilities = this.utilities;
 
 
-		if (command.shift() === '/admin')
-		{
+		if (command.shift() === '/admin') {
 			let task = command.shift();
-			
-			switch (task)
-			{
+
+			switch (task) {
 				case "restart":
 				case "res":
-				{
-					db.collection('players').findOne({login: login}).then(document =>
-						{
+					{
+						db.collection('players').findOne({ login: login }).then(document => {
 							let player = document;
 
 							let title = this.settings.masteradmin.login === login ? this.settings.masteradmin.title : player.title;
@@ -75,13 +69,12 @@ class plugin
 							console.log(this.chalk.greenBright('- Running -') + `: ${login} restarted the current track.`);
 						});
 
-					return;
-				}
+						return;
+					}
 
 				case "skip":
-				{
-					db.collection('players').findOne({login: login}).then(document =>
-						{
+					{
+						db.collection('players').findOne({ login: login }).then(document => {
 							let player = document;
 
 							let title = this.settings.masteradmin.login === login ? this.settings.masteradmin.title : player.title;
@@ -98,12 +91,12 @@ class plugin
 							console.log(this.chalk.greenBright('- Running -') + `: ${login} skipped the current track.`);
 						});
 
-					return;
-				}
+						return;
+					}
 			}
 		}
 	}
-	
+
 }
 
 module.exports = new plugin();
