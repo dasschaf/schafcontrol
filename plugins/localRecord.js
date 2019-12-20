@@ -16,7 +16,11 @@ class plugin {
 		this.utilities = require('../include/f.utilities');
 		this.dictionary = require('../include/dictionary');
 
+		// error handling functionset
+		this.e = require('../include/error');
+
 		this.chalk = require('chalk');
+
 
 		this.requiredConnections =
 			{
@@ -24,7 +28,7 @@ class plugin {
 				database: true
 			};
 
-		this.stunt_mode = false;
+		this.stunt = this.settings.stunt_mode;
 
 	}
 
@@ -98,9 +102,12 @@ class plugin {
 												.then(playerInfo => {
 													// formatting everything
 													let nickname = playerInfo.NickName,
-														_time = utilities.calculateTime(time),
+														_time = utilities.calculateTime(time);
 
-														message = utilities.fill(dictionary.localrecord_new, { nickname: nickname, time: _time, place: place });
+													if (this.stunt)
+														_time = time + dictionary.suffix_pts;
+
+													let message = utilities.fill(dictionary.localrecord_new, { nickname: nickname, time: _time, place: place });
 
 													// send message + logging
 													server.query('ChatSendServerMessage', message);
@@ -108,29 +115,28 @@ class plugin {
 												})
 
 												.catch(error => {
-													console.log(chalk.red('- SERVER ERROR -') + ': ' + error);
+													this.e.s_error(error);
 												});
 										})
 
 										.catch(error => {
-											console.log(chalk.red('- DB ERROR -') + ': ' + error);
+											this.e.db_error(error);
 										});
 								})
 
 								.catch(error => {
-									console.log(chalk.red('- DB ERROR -') + ': ' + error);
+									this.e.db_error(error);
 								});
 						}
 
-						// no improvement in time
-						if (document.time <= time)
+						// no improvement in time ||  stunts and score is lower than
+						if (document.time <= time || (this.stunt && document.time >= time))
 							return; //abort!
 
-						// better rec
-						if (document.time > time) {
-							// better time
+						// better time || stunts and score is higher
+						if (document.time > time || (this.stunt && document.time < time)) {
 
-							let imp = document.time - time;
+							let imp = Math.abs(document.time - time);
 
 							db.collection('records').findOneAndUpdate(
 								{
@@ -159,9 +165,12 @@ class plugin {
 												.then(playerInfo => {
 													let nickname = playerInfo.NickName,
 														_time = utilities.calculateTime(time),
-														improvement = '-' + utilities.calculateTime(imp),
+														improvement = '-' + utilities.calculateTime(imp);
 
-														message = utilities.fill(dictionary.localrecord_imp, { nickname: nickname, time: _time, place: place, imp: improvement });
+														if (this.stunt)
+														_time = time + dictionary.suffix_pts;
+
+														let message = utilities.fill(dictionary.localrecord_imp, { nickname: nickname, time: _time, place: place, imp: improvement });
 
 													server.query('ChatSendServerMessage', message);
 
@@ -174,32 +183,32 @@ class plugin {
 										})
 
 										.catch(error => {
-											console.log(chalk.red('- DB ERROR -') + ': ' + error);
+											this.e.db_error(error);
 										});
 								})
 
 								.catch(error => {
-									console.log(chalk.red('- DB ERROR -') + ': ' + error);
+									this.e.db_error(error);
 								});
 
 						}
 					})
 					.catch(error => {
-						console.log(chalk.red('- DB ERROR -') + ': ' + error);
+						this.e.db_error(error);
 					});
 
 				let obj = this.makeChObj(challenge, 'unknown');
 
 				db.collection('tracks').find({ uid: obj.uid })
 					.then(results => {
-						if (results.toArray().length == 0)
+						if (results.toArray().length === 0)
 							db.collection('tracks').find({}).sort({ _id: -1 }).limit(1).toArray((err, res) => {
 								obj.nr = res[0].nr + 1;
 								db.collection('tracks').findOneAndUpdate({ uid: uid }, { $setOnInsert: obj }, { upsert: true });
 							});
 
-						if (results.toArray().length == 1)
-							if (results.toArray()[0].nrLaps == -1)
+						if (results.toArray().length === 1)
+							if (results.toArray()[0].nrLaps === -1)
 								db.collection('tracks').findOneAndUpdate({ uid: uid }, { $set: obj });
 
 					});
@@ -223,7 +232,13 @@ class plugin {
 		let db = this.conns['db'],
 			server = this.conns['server'],
 			dictionary = this.dictionary,
-			util = this.utilities;
+			util = this.utilities,
+			onlineLogins = [];
+
+		ranking.forEach(elem =>
+			{
+				onlineLogins.push(elem.Login);
+			});
 
 		db.collection('records').aggregate([
 			{
@@ -245,6 +260,10 @@ class plugin {
 			mesag = util.fill(dictionary.localrecord_summary_a, { map: challenge.Name, event: "after playing" });
 
 			res.forEach((elem, idx) => {
+				// if index > 7 and player isn't on server
+				if (index > 7 && onlineLogins.includes(elem.player.login) === false)
+					return;
+
 				mesag += util.fill(dictionary.localrecord_summary_elem, { name: elem.player.nickname, time: util.calculateTime(elem.time), nr: idx + 1 });
 
 				if (idx !== res.length - 1)

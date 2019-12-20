@@ -34,5 +34,9 @@ module.exports =
 
 		karma_status: separators.status + '$z$s$fffKarma on the current track: $ff0%score%$fff (+: $ff0%pos%$fff / -: $ff0%neg%$fff)',
 		karma_recorded: separators.private + '$z$s$fffYour vote has been recorded!',
-		karma_alreadyvoted: separators.private + '$z$s$fffYou already have voted for this track!'
+		karma_alreadyvoted: separators.private + '$z$s$fffYou already have voted for this track!',
+
+
+		// suffixes:
+		suffix_pts: ' pts' // <-- points
 	};
