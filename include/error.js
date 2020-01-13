@@ -14,13 +14,13 @@ class errorhandler {
 
 	db_error (str)
 	{
-		console.log(chalk.red("[" + Date.now() + " -- SERVER ERROR]: ") + str);
+		console.log(chalk.red("[" + Date.now() + " -- DB ERROR]: ") + str);
 		process.exit(620);
 	}
 
 	s_error (str)
 	{
-		console.log(chalk.red("[" + Date.now() + " -- DB ERROR]: ") + str);
+		console.log(chalk.red("[" + Date.now() + " -- SERVER ERROR]: ") + str);
 		process.exit(621);
 	}
 
