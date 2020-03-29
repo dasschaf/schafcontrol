@@ -190,14 +190,14 @@ class plugin {
 
 				db.collection('tracks').find({ uid: obj.uid })
 					.then(results => {
-						if (results.toArray().length == 0)
+						if (results.toArray().length === 0)
 							db.collection('tracks').find({}).sort({ _id: -1 }).limit(1).toArray((err, res) => {
 								obj.nr = res[0].nr + 1;
 								db.collection('tracks').findOneAndUpdate({ uid: uid }, { $setOnInsert: obj }, { upsert: true });
 							});
 
-						if (results.toArray().length == 1)
-							if (results.toArray()[0].nrLaps == -1)
+						if (results.toArray().length === 1)
+							if (results.toArray()[0].nrLaps === -1)
 								db.collection('tracks').findOneAndUpdate({ uid: uid }, { $set: obj });
 
 					});
@@ -221,7 +221,13 @@ class plugin {
 		let db = this.conns['db'],
 			server = this.conns['server'],
 			dictionary = this.dictionary,
-			util = this.utilities;
+			util = this.utilities,
+			onlineLogins = [];
+
+		ranking.forEach(elem =>
+			{
+				onlineLogins.push(elem.Login);
+			});
 
 		db.collection('records').aggregate([
 			{
@@ -243,6 +249,10 @@ class plugin {
 			mesag = util.fill(dictionary.localrecord_summary_a, { map: challenge.Name, event: "after playing" });
 
 			res.forEach((elem, idx) => {
+				// if index > 7 and player isn't on server
+				if (index > 7 && onlineLogins.includes(elem.player.login) === false)
+					return;
+
 				mesag += util.fill(dictionary.localrecord_summary_elem, { name: elem.player.nickname, time: util.calculateTime(elem.time), nr: idx + 1 });
 
 				if (idx !== res.length - 1)

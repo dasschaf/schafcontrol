@@ -22,7 +22,10 @@ exports.mongodb =
             poolSize: 10,
 
             // URL parser setting - always have to be true!
-            useNewUrlParser: true
+            useNewUrlParser: true,
+
+            // ??
+            useUnifiedTopology: true
         },
 
         // database:
