@@ -24,8 +24,6 @@ class plugin {
 				database: true
 			};
 
-		this.stunt_mode = false;
-
 	}
 
 	onFinish(params) {
