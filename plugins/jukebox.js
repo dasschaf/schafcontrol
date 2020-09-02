@@ -1,15 +1,10 @@
-
-//
-// SchafControl sample plugin
-//
-// it actually doesn't do anything...
-//
+// jukebox plugin
 
 class plugin {
 	constructor() {
 
-		this.name = 'Sample Plugin';
-		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
+		this.name = 'Jukebox';
+		this.desc = 'Serves all your jukebox needs.';
 
 		this.requiredConnections =
 			{

@@ -1,5 +1,5 @@
 //
-//  SchafControl settings file
+//  settings file
 //
 //  it should be documented...
 //

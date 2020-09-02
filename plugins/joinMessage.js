@@ -1,14 +1,8 @@
-
-//
-// SchafControl joinMessage plugin
-//
-// provides joinMessage and an always up-to-date Nickname in the database + joincounting
-//
-
+// join message
 class plugin {
 
 	constructor() {
-		this.name = 'JoinMessage';
+		this.name = 'Join Message';
 		this.desc = 'Plugin to provide messages for player joins, leaves and join stats.';
 
 		this.settings = require('../include/settings');

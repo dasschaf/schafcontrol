@@ -1,15 +1,9 @@
-
-//
-// SchafControl sample plugin
-//
-// it actually doesn't do anything...
-//
-
+// Admin track handling
 class plugin {
 	constructor() {
 
 		this.name = 'Admin - Track handling';
-		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
+		this.desc = 'Administration plugin to take care of tracks on the server';
 
 		this.request = require('request');
 		this.fs = require('fs');

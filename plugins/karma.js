@@ -1,19 +1,9 @@
-// todo:
-
-// basic karma ++/--
-// author filters that can only be up/downvoted
-
-
-//
-// SchafControl sample plugin
-//
-// it actually doesn't do anything...
-//
+// karma plugin
 
 class plugin {
 	constructor() {
 
-		this.name = 'KarmaCounter';
+		this.name = 'Karma Counter';
 		this.desc = 'Provides basic Karma counting for tracks';
 
 		this.requiredConnections =
@@ -25,7 +15,7 @@ class plugin {
 		this.settings = require('../include/settings');
 		this.karma = require('../settings/karma.json');
 		this.dictionary = require('../include/dictionary')
-		this.utilities = require('../include/f.utilities')
+		this.utilities = require('../include/utilities')
 	}
 
 	onChat(params) {

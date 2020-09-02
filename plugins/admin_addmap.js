@@ -1,15 +1,9 @@
-
-//
-// SchafControl sample plugin
-//
-// it actually doesn't do anything...
-//
-
+// Admin Add-Map
 class plugin {
 	constructor() {
 
 		this.name = 'Admin - Add Map';
-		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
+		this.desc = 'Administration plugin to add tracks from various sources';
 
 		this.request = require('request');
 		this.fs = require('fs');

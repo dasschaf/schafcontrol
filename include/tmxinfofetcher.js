@@ -1,17 +1,11 @@
 /**
- *
- *	SchafControl TMX Info Fetcher
- *	by das schaf
- *
- *	huge thanks to Xymph for writing the XASECO
- *	equivalent so I could reverse engineer <3
- *
+ * TMX Info Fetcher
  */
 
 
 // import npm packages:
 let request = require('request');
-let utils = require('./f.utilities');
+let utils = require('./utilities');
 
 
 async function infoFetcher(game, isUID, id) {

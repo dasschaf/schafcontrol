@@ -1,5 +1,5 @@
 //
-// SchafControl Utility library
+// Utility library
 //
 
 module.exports =

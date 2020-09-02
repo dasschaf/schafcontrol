@@ -1,10 +1,4 @@
-
-//
-// SchafControl sample plugin
-//
-// it actually doesn't do anything...
-//
-
+// Admin Users handling
 class plugin {
 	constructor() {
 		this.requiredConnections =
@@ -14,7 +8,7 @@ class plugin {
 			};
 
 		this.name = 'Admin - User handling';
-		this.desc = 'Sample plugin providing a bare structure to work with for developers. It doesn\'t do anything...';
+		this.desc = 'Administration plugin, to take care of users';
 
 		this.chalk = require('chalk');
 

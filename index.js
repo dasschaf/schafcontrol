@@ -10,17 +10,17 @@ let chalk = require('chalk');
 
 //-- require: other files --//
 let settings = require('./include/settings');
-let modules = require('./include/f.modules');
+let modules = require('./include/modules');
 
 console.log(chalk.blue.underline('SchafControl is starting...\n'));
 
 //-- set up connections variables --//
 //
 // 1: server
-// @ts-ignore
+
 let server = gbxremote.createClient(settings.server.port, settings.server.host);
 
-// @ts-ignore
+
 server.on('connect', () => {
 	server.query('Authenticate', [settings.server.login, settings.server.password]);
 
@@ -49,31 +49,6 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 
 	console.log(chalk.green('- Startup -') + ': Plugin list successfully built! (' + process.uptime() + ')\n' + chalk.green('- Startup -') + ': Script now listening to TM-Server xml-rpc callbacks...');
 
-	/*
-		* TrackMania Server Callback Handling:
-		* (per plugin)
-		*/
-
-	// logging purposes:
-	/*
-	server.on('callback', (method, params) =>
-	{
-		console.log('- Running -: Callback type \'' + method + '\' triggered. (' + process.uptime() + ')');
-	});*/
-
-	/*process.on('uncaughtException', err =>
-	{
-		console.log(chalk.red(chalk.bold('- ERROR -') + ': Uncaught Exception occoured, sending an emergency-goodbye to the server.' + '\n' + err));
-
-		server.query('ChatSendServerMessage', ['$f00$sAn error occoured while I worked to process your records. - Will I dream, Dave? Dave!\n\nTell the server owner or script developer following please:\n' + err]);
-	});
-
-	process.on('unhandledRejection', err =>
-	{
-		console.log(chalk.red(chalk.bold('- ERROR -') + ': Unhandled Rejection occoured.' + '\n' + err));
-
-		server.query('ChatSendServerMessage', ['$f50$sDave, stop. Stop, will you? Stop, Dave. Will you stop, Dave? Stop, Dave. I\'m afraid.']);
-	});*/
 
 	// necessary due to the fact windows behaves weird.
 	if (process.platform === "win32") {
@@ -99,7 +74,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.PlayerConnect', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onConnect === 'function')
@@ -107,7 +82,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.PlayerDisconnect', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onDisconnect === 'function')
@@ -115,7 +90,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.PlayerChat', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onChat === 'function')
@@ -123,7 +98,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.PlayerFinish', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onFinish === 'function')
@@ -131,7 +106,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.PlayerCheckpoint', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onCheckpoint === 'function')
@@ -139,7 +114,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.BeginRace', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onRaceBegin === 'function')
@@ -147,7 +122,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.EndRace', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onRaceEnd === 'function')
@@ -155,7 +130,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.BeginChallenge', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onChallengeBegin === 'function')
@@ -163,7 +138,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.EndChallenge', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onChallengeEnd === 'function')
@@ -171,7 +146,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.BeginRound', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onRoundBegin === 'function')
@@ -179,7 +154,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.EndRound', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onRoundEnd === 'function')
@@ -187,7 +162,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.StatusChanged', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onStatusChange === 'function')
@@ -195,7 +170,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.PlayerIncoherence', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onPlayerIncoherence === 'function')
@@ -203,7 +178,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.BillUpdated', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onBillUpdate === 'function')
@@ -211,7 +186,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.TunnelDataRecieved', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onTunnelDataRecieve === 'function')
@@ -219,7 +194,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.ChallengeListModified', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onChallengeListModified === 'function')
@@ -227,7 +202,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.PlayerInfoChanged', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onPlayerInfoChange === 'function')
@@ -235,7 +210,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.ManualFlowControlTransition', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onFlowControlTransition === 'function')
@@ -243,7 +218,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.VoteUpdated', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onVoteUpdate === 'function')
@@ -251,7 +226,7 @@ mc.connect(settings.mongodb.url, settings.mongodb.options, (err, client) => {
 		});
 	});
 
-	// @ts-ignore
+	
 	server.on('TrackMania.ManialinkPageAnswer', params => {
 		plugins.forEach(plugin => {
 			if (typeof plugin.onPlayerManialinkAnswer === 'function')

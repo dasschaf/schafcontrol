@@ -1,6 +1,6 @@
 
 //
-// SchafControl sample plugin
+// sample plugin
 //
 // it actually doesn't do anything...
 //
@@ -13,7 +13,7 @@ class plugin {
 
 		this.requiredConnections =
 			{
-				server: true,		// 1st argument
+				server: true,
 				database: true
 			};
 

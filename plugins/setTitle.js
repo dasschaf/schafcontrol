@@ -1,17 +1,12 @@
-
-//
-// SchafControl sample plugin
-//
-// it actually doesn't do anything...
-//
+// Title setter
 
 class plugin {
 	constructor() {
 
-		this.name = 'Set - Title';
-		this.desc = 'Set library provides a variety of functions to set settings for yourself - this particular module provides support to set your custom title';
+		this.name = 'Set Title';
+		this.desc = 'Plugin to let you set titles';
 
-		this.utilities = require('../include/f.utilities');
+		this.utilities = require('../include/utilities');
 		this.dictionary = require('../include/dictionary');
 
 		this.chalk = require('chalk');

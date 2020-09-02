@@ -1,19 +1,13 @@
-
-//
-// SchafControl localRecords plugin
-// - race -
-//
-// localRecord handling
-//
+// local records handling
 
 class plugin {
 	constructor() {
 
-		this.name = 'LocalRecords';
+		this.name = 'Local Records';
 		this.desc = 'Local Records management plugin';
 
 		this.settings = require('../include/settings');
-		this.utilities = require('../include/f.utilities');
+		this.utilities = require('../include/utilities');
 		this.dictionary = require('../include/dictionary');
 
 		this.chalk = require('chalk');

@@ -1,9 +1,4 @@
-
-//
-// SchafControl sample plugin
-//
-// it actually doesn't do anything...
-//
+// Winner Counter
 
 class plugin {
 	constructor() {
@@ -12,7 +7,7 @@ class plugin {
 		this.desc = 'Provides stats for count of wins';
 
 		this.dictionary = require('../include/dictionary');
-		this.utilities = require('../include/f.utilities');
+		this.utilities = require('../include/utilities');
 
 		this.chalk = require('chalk');
 

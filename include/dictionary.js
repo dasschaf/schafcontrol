@@ -1,6 +1,5 @@
 //
-//	SchafControl sentence bank
-//
+//	sentence bank
 //
 
 let separators =
