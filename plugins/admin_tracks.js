@@ -8,7 +8,7 @@ class plugin {
 		this.request = require('request');
 		this.fs = require('fs');
 		this.settings = require('../include/settings');
-		this.utilities = require('../include/f.utilities');
+		this.utilities = require('../include/utilities');
 		this.dictionary = require('../include/dictionary');
 
 		this.chalk = require('chalk');
